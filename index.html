@@ -1,1333 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shake2Save</title>
-    <!-- Google Fonts for a modern look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* CSS for styling the app */
-        :root {
-            --primary-color: #c70000; /* Main red color */
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --light-text-color: #666;
-            --header-bg: #ffffff;
-            --button-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shake2Save</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS for styling the app */
+        :root {
+            --primary-color: #c70000; /* Main red color */
+            --background-color: #f0f2f5;
+            --text-color: #333;
+            --light-text-color: #666;
+            --header-bg: #ffffff;
+            --button-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* --- Header --- */
-        .header {
-            background-color: var(--header-bg);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .header-title {
-            font-weight: 600;
-            font-size: 1.1em;
-            color: var(--text-color);
-        }
-        .header-icon {
-            font-size: 1.5em;
-            cursor: pointer;
-        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* --- Header --- */
+        .header {
+            background-color: var(--header-bg);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-title {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+        .header-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
 
-        /* --- Main Content --- */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
-        }
-        
-        .title {
-            font-size: 2em;
-            font-weight: 700;
-            color: #5d2b2b;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            font-size: 1.2em;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-        }
-        
-        /* --- SOS Emergency Button --- */
-        .sos-button-container {
-            position: relative;
-            width: 200px; /* Adjust size as needed */
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        
-        .sos-button {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ff4b4b, var(--primary-color));
-            border: 8px solid #fff;
-            box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4);
-            color: white;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 1;
-        }
-        
-        .sos-button:active {
-            transform: scale(0.95);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
+        }
+        
+        .title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #5d2b2b;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        
+        /* --- SOS Emergency Button --- */
+        .sos-button-container {
+            position: relative;
+            width: 200px; /* Adjust size as needed */
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .sos-button {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4b4b, var(--primary-color));
+            border: 8px solid #fff;
+            box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4);
+            color: white;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 1;
+        }
+        
+        .sos-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
 
-        .pulsing-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 10px solid rgba(200, 0, 0, 0.3);
-            animation: pulse 2s infinite;
-            z-index: 0;
-        }
+        .pulsing-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid rgba(200, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+            z-index: 0;
+        }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.4);
-                opacity: 0;
-            }
-        }
-        
-        .info-text {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: var(--light-text-color);
-            margin-bottom: 40px;
-        }
-        
-        .powered-by {
-            font-size: 0.9em;
-            color: #999;
-        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.4);
+                opacity: 0;
+            }
+        }
+        
+        .info-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--light-text-color);
+            margin-bottom: 40px;
+        }
+        
+        .powered-by {
+            font-size: 0.9em;
+            color: #999;
+        }
 
-        .powered-by img {
-            width: 50px; /* Placeholder for your logo */
-            margin-top: 10px;
-        }
+        .powered-by img {
+            width: 50px; /* Placeholder for your logo */
+            margin-top: 10px;
+        }
 
-        /* --- Footer --- */
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.9em;
-        }
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9em;
+        }
 
-        /* --- Status Message Modal --- */
-        .status-modal {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 2000;
-            transition: top 0.5s ease-in-out;
-            font-weight: 600;
-        }
+        /* --- Status Message Modal --- */
+        .status-modal {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: top 0.5s ease-in-out;
+            font-weight: 600;
+        }
 
-        .status-modal.show {
-            top: 20px;
-        }
+        .status-modal.show {
+            top: 20px;
+        }
 
-        .status-modal.error {
-            background-color: var(--primary-color);
-        }
+        .status-modal.error {
+            background-color: var(--primary-color);
+        }
 
-        /* --- Generic Modal Overlay --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none; /* Hidden by default */
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-        }
+        /* --- Generic Modal Overlay --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
 
-        /* --- Confirmation Modal --- */
-        .confirm-modal {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 320px;
-        }
+        /* --- Confirmation Modal --- */
+        .confirm-modal {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 320px;
+        }
 
-        .confirm-modal h2 {
-            margin-top: 0;
-            font-size: 1.2em;
-            color: var(--text-color);
-        }
-        
-        .confirm-modal p {
-            margin-bottom: 25px;
-            color: var(--light-text-color);
-        }
+        .confirm-modal h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: var(--text-color);
+        }
+        
+        .confirm-modal p {
+            margin-bottom: 25px;
+            color: var(--light-text-color);
+        }
 
-        .confirm-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
+        .confirm-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
 
-        .confirm-buttons button {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
+        .confirm-buttons button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
 
-        .confirm-buttons button:hover {
-            opacity: 0.9;
-        }
+        .confirm-buttons button:hover {
+            opacity: 0.9;
+        }
 
-        #confirmCancel {
-            background-color: var(--primary-color);
-        }
+        #confirmCancel {
+            background-color: var(--primary-color);
+        }
 
-        #confirmOk {
-            background-color: #28a745;
-        }
+        #confirmOk {
+            background-color: #28a745;
+        }
 
-        /* --- Side Navigation Menu --- */
-        .side-nav {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Hidden by default */
-            width: 280px;
-            height: 100%;
-            background-color: #fff;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-            z-index: 4000;
-            transition: left 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-        }
+        /* --- Side Navigation Menu --- */
+        .side-nav {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Hidden by default */
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            z-index: 4000;
+            transition: left 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .side-nav.open {
-            left: 0;
-        }
+        .side-nav.open {
+            left: 0;
+        }
 
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 3999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 3999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
 
-        .nav-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
+        .nav-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
 
-        .nav-profile {
-            background: linear-gradient(to bottom, #e0e0e0, #ffffff);
-            padding: 30px 20px;
-            text-align: center;
-        }
+        .nav-profile {
+            background: linear-gradient(to bottom, #e0e0e0, #ffffff);
+            padding: 30px 20px;
+            text-align: center;
+        }
 
-        .nav-profile-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 4px solid var(--primary-color);
-            margin: 0 auto 15px;
-            background-image: url('https://placehold.co/100x100/ffffff/333?text=G');
-            background-size: cover;
-            background-position: center;
-        }
+        .nav-profile-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            margin: 0 auto 15px;
+            background-image: url('https://placehold.co/100x100/ffffff/333?text=G');
+            background-size: cover;
+            background-position: center;
+        }
 
-        .nav-user-name {
-            font-weight: 700;
-            font-size: 1.2em;
-            margin: 0;
-            color: var(--text-color);
-        }
+        .nav-user-name {
+            font-weight: 700;
+            font-size: 1.2em;
+            margin: 0;
+            color: var(--text-color);
+        }
 
-        .nav-user-phone {
-            font-size: 0.9em;
-            color: var(--light-text-color);
-            margin: 5px 0 0;
-        }
+        .nav-user-phone {
+            font-size: 0.9em;
+            color: var(--light-text-color);
+            margin: 5px 0 0;
+        }
 
-        .nav-links {
-            list-style: none;
-            padding: 15px 0;
-            margin: 0;
-            flex-grow: 1;
-        }
+        .nav-links {
+            list-style: none;
+            padding: 15px 0;
+            margin: 0;
+            flex-grow: 1;
+        }
 
-        .nav-links li a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 1em;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
+        .nav-links li a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
 
-        .nav-links li a:hover {
-            background-color: #f0f0f0;
-        }
+        .nav-links li a:hover {
+            background-color: #f0f0f0;
+        }
 
-        .nav-footer {
-            padding: 20px;
-            text-align: center;
-            font-size: 0.8em;
-            color: #999;
-            border-top: 1px solid #ddd;
-        }
-        
-        /* --- About App Modal --- */
-        .about-modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .about-modal-content h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-        .about-modal-content h3 {
-            margin-top: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        .about-modal-content p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .about-modal-content ul {
-            list-style-type: '✓';
-            padding-left: 20px;
-        }
-        .about-modal-content li {
-            padding-left: 10px;
-            margin-bottom: 10px;
-        }
-        .close-btn {
-            display: block;
-            margin: 20px auto 0;
-            padding: 10px 30px;
-            border: none;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
+        .nav-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #999;
+            border-top: 1px solid #ddd;
+        }
+        
+        /* --- About App Modal --- */
+        .about-modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .about-modal-content h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .about-modal-content h3 {
+            margin-top: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .about-modal-content p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .about-modal-content ul {
+            list-style-type: '✓';
+            padding-left: 20px;
+        }
+        .about-modal-content li {
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        .close-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 30px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        /* --- Edit Profile Modal --- */
+        #editProfileOverlay .confirm-buttons button {
+             width: 48%;
+        }
 
-    </style>
+    </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <span class="header-icon" id="hamburgerIcon">☰</span>
-        <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
-        <span class="header-icon">🔔</span>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <h1 class="title">SHAKE2SAVE</h1>
-        <p class="subtitle">Press the Button or Shake in Emergency</p>
-
-        <!-- SOS Button -->
-        <div class="sos-button-container">
-            <div class="pulsing-ring"></div>
-            <button id="sosButton" class="sos-button">SOS</button>
-        </div>
-
-        <p class="info-text">You will alert your trusted contacts.</p>
-
-        <div class="powered-by">
-            <p>POWERED BY</p>
-            <!-- You can replace this placeholder with your team logo -->
-            <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
-        </div>
-    </main>
-    
-    <!-- Footer Section (Optional) -->
-    <footer class="footer">
-        <p>Shake2Save | A Code Warriors Project</p>
-    </footer>
-
-    <!-- Side Navigation Menu -->
-    <div id="sideNav" class="side-nav">
-        <div class="nav-profile">
-            <div class="nav-profile-img"></div>
-            <h3 class="nav-user-name">Gowshik GS</h3>
-            <p class="nav-user-phone">8668012126</p>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="#" id="editProfileBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                    Edit Profile
-                </a>
-            </li>
-            <li>
-                <a href="#" id="aboutAppBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    About App
-                </a>
-            </li>
-        </ul>
-        <div class="nav-footer">
-            Version 1.0.0
-        </div>
-    </div>
-    <div id="navOverlay" class="nav-overlay"></div>
-
-    <!-- Status Modal for notifications -->
-    <div id="statusModal" class="status-modal"></div>
-
-    <!-- Confirmation Modal for SOS -->
-    <div id="confirmOverlay" class="modal-overlay">
-        <div class="confirm-modal">
-            <h2>Emergency Alert Trigger</h2>
-            <p>To confirm the emergency alert, press 'OK'. If you pressed this by mistake, press 'CANCEL'.</p>
-            <div class="confirm-buttons">
-                <button id="confirmCancel">CANCEL</button>
-                <button id="confirmOk">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- About App Modal -->
-    <div id="aboutOverlay" class="modal-overlay">
-        <div class="about-modal-content">
-            <h2>About Shake2Save</h2>
-            <p>Our solution is Shake2Save, a Progressive Web App (PWA) designed to make women's safety faster, simpler, and more accessible.</p>
-            <h3>Key Highlights:</h3>
-            <ul>
-                <li><strong>Lightweight PWA:</strong> Works directly from the browser and can be added to the home screen — no installation barrier.</li>
-                <li><strong>Live Safety Map:</strong> Shows safe/unsafe zones based on crowdsourced reports and public data.</li>
-                <li><strong>Quick Reporting:</strong> Allows users to mark unsafe areas with a single tap.</li>
-                <li><strong>Shake-to-Alert (Unique Feature):</strong> Just shake the phone to instantly send your live location and an SOS message.</li>
-                <li><strong>One-Tap SOS Button:</strong> A large, visible emergency button is always accessible for manual triggering.</li>
-            </ul>
-            <button id="closeAboutBtn" class="close-btn">Close</button>
-        </div>
-    </div>
-
-    <script>
-        // --- JavaScript Functionality ---
-
-        const sosButton = document.getElementById('sosButton');
-        const statusModal = document.getElementById('statusModal');
-        const confirmOverlay = document.getElementById('confirmOverlay');
-        const confirmCancel = document.getElementById('confirmCancel');
-        const confirmOk = document.getElementById('confirmOk');
-
-        // --- 1. One-Tap SOS Button Logic ---
-        sosButton.addEventListener('click', () => {
-            // Show the confirmation modal instead of sending SOS directly
-            confirmOverlay.style.display = 'flex';
-        });
-        
-        // --- Modal Button Logic ---
-        confirmCancel.addEventListener('click', () => {
-            confirmOverlay.style.display = 'none';
-        });
-
-        confirmOk.addEventListener('click', () => {
-            confirmOverlay.style.display = 'none';
-            // Vibrate for feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
-            sendSOS("Button Pressed");
-        });
-
-
-        // --- 2. Shake Detection Logic ---
-        const shakeThreshold = 25; // Sensitivity: Higher means less sensitive
-        let lastX, lastY, lastZ;
-        let lastTimestamp = 0;
-        const shakeCooldown = 2000; // 2 seconds cooldown to prevent multiple alerts
-
-        function handleMotion(event) {
-            const currentTime = new Date().getTime();
-            if ((currentTime - lastTimestamp) < shakeCooldown) {
-                return; // Still in cooldown period
-            }
-            
-            const acceleration = event.accelerationIncludingGravity;
-            
-            if (lastX === undefined) {
-                lastX = acceleration.x;
-                lastY = acceleration.y;
-                lastZ = acceleration.z;
-                return;
-            }
-
-            const deltaX = Math.abs(acceleration.x - lastX);
-            const deltaY = Math.abs(acceleration.y - lastY);
-            const deltaZ = Math.abs(acceleration.z - lastZ);
-
-            if (deltaX > shakeThreshold || deltaY > shakeThreshold || deltaZ > shakeThreshold) {
-                console.log('Shake detected!');
-                if ('vibrate' in navigator) {
-                    navigator.vibrate([200, 100, 200]); // Vibrate pattern for shake
-                }
-                sendSOS("Shake Detected");
-                lastTimestamp = currentTime; // Reset the timestamp
-            }
-
-            lastX = acceleration.x;
-            lastY = acceleration.y;
-            lastZ = acceleration.z;
-        }
-        
-        // Request permission for motion events on iOS 13.3+
-        function requestMotionPermission() {
-             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                             window.addEventListener('devicemotion', handleMotion);
-                             console.log('Motion permission granted.');
-                        } else {
-                            console.log('Motion permission denied.');
-                            showStatus('Shake to alert disabled. Please grant motion sensor permission.', 'error');
-                        }
-                    })
-                    .catch(console.error);
-            } else {
-                // Handle non-iOS 13.3+ devices or devices without this API
-                window.addEventListener('devicemotion', handleMotion);
-            }
-        }
-        
-        // Start listening for shake events
-        requestMotionPermission();
-
-
-        // --- 3. Main SOS Function (Gets Location and sends alert) ---
-        function sendSOS(triggerMethod) {
-            console.log(SOS triggered by: ${triggerMethod}. Getting location...);
-            showStatus(SOS TRIGGERED! Alerting contacts..., 'default');
-
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        const mapsLink = https://www.google.com/maps?q=${latitude},${longitude};
-                        
-                        const message = Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink};
-                        console.log(message);
-
-                        // *HACKATHON INTEGRATION POINT*
-                        // Here you would send this 'message' to your backend or Firebase
-                        // to notify the trusted contacts (e.g., using Twilio for SMS).
-                        // For now, we'll just show it in a confirmation message.
-
-                        setTimeout(() => {
-                           showStatus(Alert sent with your location., 'default');
-                        }, 1500);
-                    },
-                    (error) => {
-                        console.error("Error getting location:", error.message);
-                        showStatus('Could not get location. Please enable GPS.', 'error');
-                    },
-                    { enableHighAccuracy: true } // Request more accurate location
-                );
-            } else {
-                showStatus('Geolocation is not supported by your browser.', 'error');
-            }
-        }
-
-        // --- 4. UI Feedback Function (Status Modal) ---
-        function showStatus(message, type = 'default') {
-            statusModal.textContent = message;
-            statusModal.className = 'status-modal show';
-            
-            if (type === 'error') {
-                statusModal.classList.add('error');
-            }
-
-            // Hide the modal after 4 seconds
-            setTimeout(() => {
-                statusModal.classList.remove('show');
-            }, 4000);
-        }
-
-        // --- 5. Side Navigation Logic ---
-        const sideNav = document.getElementById('sideNav');
-        const navOverlay = document.getElementById('navOverlay');
-        const hamburgerIcon = document.getElementById('hamburgerIcon');
-        const aboutAppBtn = document.getElementById('aboutAppBtn');
-        const aboutOverlay = document.getElementById('aboutOverlay');
-        const closeAboutBtn = document.getElementById('closeAboutBtn');
-
-        // Open side nav
-        hamburgerIcon.addEventListener('click', () => {
-            sideNav.classList.add('open');
-            navOverlay.classList.add('show');
-        });
-
-        // Function to close the side nav
-        function closeNav() {
-            sideNav.classList.remove('open');
-            navOverlay.classList.remove('show');
-        }
-        // Close nav when clicking the overlay
-        navOverlay.addEventListener('click', closeNav);
-
-        // --- "About App" Modal Logic ---
-        aboutAppBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent page from jumping
-            aboutOverlay.style.display = 'flex';
-            closeNav(); // Close the nav menu when opening the modal
-        });
-
-        // Hide About App modal
-        closeAboutBtn.addEventListener('click', () => {
-            aboutOverlay.style.display = 'none';
-        });
-
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shake2Save</title>
-    <!-- Google Fonts for a modern look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* CSS for styling the app */
-        :root {
-            --primary-color: #c70000; /* Main red color */
-            --background-color: #f0f2f5;
-            --text-color: #333;
-            --light-text-color: #666;
-            --header-bg: #ffffff;
-            --button-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* --- Header --- */
-        .header {
-            background-color: var(--header-bg);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .header-title {
-            font-weight: 600;
-            font-size: 1.1em;
-            color: var(--text-color);
-        }
-        .header-icon {
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-
-        /* --- Main Content --- */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
-        }
-        
-        .title {
-            font-size: 2em;
-            font-weight: 700;
-            color: #5d2b2b;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            font-size: 1.2em;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-        }
-        
-        /* --- SOS Emergency Button --- */
-        .sos-button-container {
-            position: relative;
-            width: 200px; /* Adjust size as needed */
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        
-        .sos-button {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ff4b4b, var(--primary-color));
-            border: 8px solid #fff;
-            box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4);
-            color: white;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 1;
-        }
-        
-        .sos-button:active {
-            transform: scale(0.95);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .pulsing-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 10px solid rgba(200, 0, 0, 0.3);
-            animation: pulse 2s infinite;
-            z-index: 0;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.4);
-                opacity: 0;
-            }
-        }
-        
-        .info-text {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: var(--light-text-color);
-            margin-bottom: 40px;
-        }
-        
-        .powered-by {
-            font-size: 0.9em;
-            color: #999;
-        }
-
-        .powered-by img {
-            width: 50px; /* Placeholder for your logo */
-            margin-top: 10px;
-        }
-
-        /* --- Footer --- */
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        /* --- Status Message Modal --- */
-        .status-modal {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 2000;
-            transition: top 0.5s ease-in-out;
-            font-weight: 600;
-        }
-
-        .status-modal.show {
-            top: 20px;
-        }
-
-        .status-modal.error {
-            background-color: var(--primary-color);
-        }
-
-        /* --- Generic Modal Overlay --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none; /* Hidden by default */
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-        }
-
-        /* --- Confirmation Modal --- */
-        .confirm-modal {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 320px;
-        }
-
-        .confirm-modal h2 {
-            margin-top: 0;
-            font-size: 1.2em;
-            color: var(--text-color);
-        }
-        
-        .confirm-modal p {
-            margin-bottom: 25px;
-            color: var(--light-text-color);
-        }
-
-        .confirm-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .confirm-buttons button {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .confirm-buttons button:hover {
-            opacity: 0.9;
-        }
-
-        #confirmCancel {
-            background-color: var(--primary-color);
-        }
-
-        #confirmOk {
-            background-color: #28a745;
-        }
-
-        /* --- Side Navigation Menu --- */
-        .side-nav {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Hidden by default */
-            width: 280px;
-            height: 100%;
-            background-color: #fff;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-            z-index: 4000;
-            transition: left 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .side-nav.open {
-            left: 0;
-        }
-
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 3999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
-
-        .nav-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .nav-profile {
-            background: linear-gradient(to bottom, #e0e0e0, #ffffff);
-            padding: 30px 20px;
-            text-align: center;
-        }
-
-        .nav-profile-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 4px solid var(--primary-color);
-            margin: 0 auto 15px;
-            background-image: url('https://placehold.co/100x100/ffffff/333?text=G');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .nav-user-name {
-            font-weight: 700;
-            font-size: 1.2em;
-            margin: 0;
-            color: var(--text-color);
-        }
-
-        .nav-user-phone {
-            font-size: 0.9em;
-            color: var(--light-text-color);
-            margin: 5px 0 0;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 15px 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-
-        .nav-links li a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 1em;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .nav-links li a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .nav-footer {
-            padding: 20px;
-            text-align: center;
-            font-size: 0.8em;
-            color: #999;
-            border-top: 1px solid #ddd;
-        }
-        
-        /* --- About App Modal --- */
-        .about-modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .about-modal-content h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-        .about-modal-content h3 {
-            margin-top: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        .about-modal-content p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .about-modal-content ul {
-            list-style-type: '✓';
-            padding-left: 20px;
-        }
-        .about-modal-content li {
-            padding-left: 10px;
-            margin-bottom: 10px;
-        }
-        .close-btn {
-            display: block;
-            margin: 20px auto 0;
-            padding: 10px 30px;
-            border: none;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-    </style>
-</head>
-<body>
-    <!-- Header Section -->
-    <header class="header">
-        <span class="header-icon" id="hamburgerIcon">☰</span>
-        <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
-        <span class="header-icon">🔔</span>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <h1 class="title">SHAKE2SAVE</h1>
-        <p class="subtitle">Press the Button or Shake in Emergency</p>
-
-        <!-- SOS Button -->
-        <div class="sos-button-container">
-            <div class="pulsing-ring"></div>
-            <button id="sosButton" class="sos-button">SOS</button>
-        </div>
-
-        <p class="info-text">You will alert your trusted contacts.</p>
-
-        <div class="powered-by">
-            <p>POWERED BY</p>
-            <!-- You can replace this placeholder with your team logo -->
-            <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
-        </div>
-    </main>
-    
-    <!-- Footer Section (Optional) -->
-    <footer class="footer">
-        <p>Shake2Save | A Code Warriors Project</p>
-    </footer>
-
-    <!-- Side Navigation Menu -->
-    <div id="sideNav" class="side-nav">
-        <div class="nav-profile">
-            <div class="nav-profile-img"></div>
-            <h3 class="nav-user-name">Gowshik GS</h3>
-            <p class="nav-user-phone">8668012126</p>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="#" id="editProfileBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                    Edit Profile
-                </a>
-            </li>
-            <li>
-                <a href="#" id="aboutAppBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    About App
-                </a>
-            </li>
-        </ul>
-        <div class="nav-footer">
-            Version 1.0.0
-        </div>
-    </div>
-    <div id="navOverlay" class="nav-overlay"></div>
-
-    <!-- Status Modal for notifications -->
-    <div id="statusModal" class="status-modal"></div>
-
-    <!-- Confirmation Modal for SOS -->
-    <div id="confirmOverlay" class="modal-overlay">
-        <div class="confirm-modal">
-            <h2>Emergency Alert Trigger</h2>
-            <p>To confirm the emergency alert, press 'OK'. If you pressed this by mistake, press 'CANCEL'.</p>
-            <div class="confirm-buttons">
-                <button id="confirmCancel">CANCEL</button>
-                <button id="confirmOk">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- About App Modal -->
-    <div id="aboutOverlay" class="modal-overlay">
-        <div class="about-modal-content">
-            <h2>About Shake2Save</h2>
-            <p>Our solution is Shake2Save, a Progressive Web App (PWA) designed to make women's safety faster, simpler, and more accessible.</p>
-            <h3>Key Highlights:</h3>
-            <ul>
-                <li><strong>Lightweight PWA:</strong> Works directly from the browser and can be added to the home screen — no installation barrier.</li>
-                <li><strong>Live Safety Map:</strong> Shows safe/unsafe zones based on crowdsourced reports and public data.</li>
-                <li><strong>Quick Reporting:</strong> Allows users to mark unsafe areas with a single tap.</li>
-                <li><strong>Shake-to-Alert (Unique Feature):</strong> Just shake the phone to instantly send your live location and an SOS message.</li>
-                <li><strong>One-Tap SOS Button:</strong> A large, visible emergency button is always accessible for manual triggering.</li>
-            </ul>
-            <button id="closeAboutBtn" class="close-btn">Close</button>
-        </div>
-    </div>
-
-    <script>
-        // --- JavaScript Functionality ---
-
-        const sosButton = document.getElementById('sosButton');
-        const statusModal = document.getElementById('statusModal');
-        const confirmOverlay = document.getElementById('confirmOverlay');
-        const confirmCancel = document.getElementById('confirmCancel');
-        const confirmOk = document.getElementById('confirmOk');
-
-        // --- 1. One-Tap SOS Button Logic ---
-        sosButton.addEventListener('click', () => {
-            // Show the confirmation modal instead of sending SOS directly
-            confirmOverlay.style.display = 'flex';
-        });
-        
-        // --- Modal Button Logic ---
-        confirmCancel.addEventListener('click', () => {
-            confirmOverlay.style.display = 'none';
-        });
-
-        confirmOk.addEventListener('click', () => {
-            confirmOverlay.style.display = 'none';
-            // Vibrate for feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
-            sendSOS("Button Pressed");
-        });
-
-
-        // --- 2. Shake Detection Logic ---
-        const shakeThreshold = 25; // Sensitivity: Higher means less sensitive
-        let lastX, lastY, lastZ;
-        let lastTimestamp = 0;
-        const shakeCooldown = 2000; // 2 seconds cooldown to prevent multiple alerts
-
-        function handleMotion(event) {
-            const currentTime = new Date().getTime();
-            if ((currentTime - lastTimestamp) < shakeCooldown) {
-                return; // Still in cooldown period
-            }
-            
-            const acceleration = event.accelerationIncludingGravity;
-            
-            if (lastX === undefined) {
-                lastX = acceleration.x;
-                lastY = acceleration.y;
-                lastZ = acceleration.z;
-                return;
-            }
-
-            const deltaX = Math.abs(acceleration.x - lastX);
-            const deltaY = Math.abs(acceleration.y - lastY);
-            const deltaZ = Math.abs(acceleration.z - lastZ);
-
-            if (deltaX > shakeThreshold || deltaY > shakeThreshold || deltaZ > shakeThreshold) {
-                console.log('Shake detected!');
-                if ('vibrate' in navigator) {
-                    navigator.vibrate([200, 100, 200]); // Vibrate pattern for shake
-                }
-                sendSOS("Shake Detected");
-                lastTimestamp = currentTime; // Reset the timestamp
-            }
-
-            lastX = acceleration.x;
-            lastY = acceleration.y;
-            lastZ = acceleration.z;
-        }
-        
-        // Request permission for motion events on iOS 13.3+
-        function requestMotionPermission() {
-             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                             window.addEventListener('devicemotion', handleMotion);
-                             console.log('Motion permission granted.');
-                        } else {
-                            console.log('Motion permission denied.');
-                            showStatus('Shake to alert disabled. Please grant motion sensor permission.', 'error');
-                        }
-                    })
-                    .catch(console.error);
-            } else {
-                // Handle non-iOS 13.3+ devices or devices without this API
-                window.addEventListener('devicemotion', handleMotion);
-            }
-        }
-        
-        // Start listening for shake events
-        requestMotionPermission();
-
-
-        // --- 3. Main SOS Function (Gets Location and sends alert) ---
-        function sendSOS(triggerMethod) {
-            console.log(SOS triggered by: ${triggerMethod}. Getting location...);
-            showStatus(SOS TRIGGERED! Alerting contacts..., 'default');
-
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        const mapsLink = https://www.google.com/maps?q=${latitude},${longitude};
-                        
-                        const message = Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink};
-                        console.log(message);
-
-                        // *HACKATHON INTEGRATION POINT*
-                        // Here you would send this 'message' to your backend or Firebase
-                        // to notify the trusted contacts (e.g., using Twilio for SMS).
-                        // For now, we'll just show it in a confirmation message.
-
-                        setTimeout(() => {
-                           showStatus(Alert sent with your location., 'default');
-                        }, 1500);
-                    },
-                    (error) => {
-                        console.error("Error getting location:", error.message);
-                        showStatus('Could not get location. Please enable GPS.', 'error');
-                    },
-                    { enableHighAccuracy: true } // Request more accurate location
-                );
-            } else {
-                showStatus('Geolocation is not supported by your browser.', 'error');
-            }
-        }
-
-        // --- 4. UI Feedback Function (Status Modal) ---
-        function showStatus(message, type = 'default') {
-            statusModal.textContent = message;
-            statusModal.className = 'status-modal show';
-            
-            if (type === 'error') {
-                statusModal.classList.add('error');
-            }
-
-            // Hide the modal after 4 seconds
-            setTimeout(() => {
-                statusModal.classList.remove('show');
-            }, 4000);
-        }
-
-        // --- 5. Side Navigation Logic ---
-        const sideNav = document.getElementById('sideNav');
-        const navOverlay = document.getElementById('navOverlay');
-        const hamburgerIcon = document.getElementById('hamburgerIcon');
-        const aboutAppBtn = document.getElementById('aboutAppBtn');
-        const aboutOverlay = document.getElementById('aboutOverlay');
-        const closeAboutBtn = document.getElementById('closeAboutBtn');
-
-        // Open side nav
-        hamburgerIcon.addEventListener('click', () => {
-            sideNav.classList.add('open');
-            navOverlay.classList.add('show');
-        });
-
-        // Function to close the side nav
-        function closeNav() {
-            sideNav.classList.remove('open');
-            navOverlay.classList.remove('show');
-        }
-        // Close nav when clicking the overlay
-        navOverlay.addEventListener('click', closeNav);
-
-        // --- "About App" Modal Logic ---
-        aboutAppBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent page from jumping
-            aboutOverlay.style.display = 'flex';
-            closeNav(); // Close the nav menu when opening the modal
-        });
-
-        // Hide About App modal
-        closeAboutBtn.addEventListener('click', () => {
-            aboutOverlay.style.display = 'none';
-        });
-
-    </script>
+    <header class="header">
+        <span class="header-icon" id="hamburgerIcon">☰</span>
+        <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
+        <span class="header-icon">🔔</span>
+    </header>
+
+    <main class="main-content">
+        <h1 class="title">SHAKE2SAVE</h1>
+        <p class="subtitle">Press the Button or Shake in Emergency</p>
+
+        <div class="sos-button-container">
+            <div class="pulsing-ring"></div>
+            <button id="sosButton" class="sos-button">SOS</button>
+        </div>
+
+        <p class="info-text">You will alert your trusted contacts.</p>
+
+        <div class="powered-by">
+            <p>POWERED BY</p>
+            <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>Shake2Save | A Code Warriors Project</p>
+    </footer>
+
+    <div id="sideNav" class="side-nav">
+        <div class="nav-profile">
+            <div class="nav-profile-img"></div>
+            <h3 class="nav-user-name">Your Name</h3>
+            <p class="nav-user-phone">8668012126</p>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#" id="editProfileBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    Edit Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" id="aboutAppBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    About App
+                </a>
+            </li>
+        </ul>
+        <div class="nav-footer">
+            Version 1.0.0
+        </div>
+    </div>
+    <div id="navOverlay" class="nav-overlay"></div>
+
+    <div id="statusModal" class="status-modal"></div>
+
+    <div id="confirmOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Emergency Alert Trigger</h2>
+            <p>To confirm the emergency alert, press 'OK'. If you pressed this by mistake, press 'CANCEL'.</p>
+            <div class="confirm-buttons">
+                <button id="confirmCancel">CANCEL</button>
+                <button id="confirmOk">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="aboutOverlay" class="modal-overlay">
+        <div class="about-modal-content">
+            <h2>About Shake2Save</h2>
+            <p>Our solution is Shake2Save, a Progressive Web App (PWA) designed to make women's safety faster, simpler, and more accessible.</p>
+            <h3>Key Highlights:</h3>
+            <ul>
+                <li><strong>Lightweight PWA:</strong> Works directly from the browser and can be added to the home screen — no installation barrier.</li>
+                <li><strong>Live Safety Map:</strong> Shows safe/unsafe zones based on crowdsourced reports and public data.</li>
+                <li><strong>Quick Reporting:</strong> Allows users to mark unsafe areas with a single tap.</li>
+                <li><strong>Shake-to-Alert (Unique Feature):</strong> Just shake the phone to instantly send your live location and an SOS message.</li>
+                <li><strong>One-Tap SOS Button:</strong> A large, visible emergency button is always accessible for manual triggering.</li>
+            </ul>
+            <button id="closeAboutBtn" class="close-btn">Close</button>
+        </div>
+    </div>
+
+    <div id="editProfileOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Edit Profile</h2>
+            <p>Enter your full name and save it.</p>
+            <input type="text" id="nameInput" placeholder="Enter your name" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <div class="confirm-buttons">
+                <button id="saveProfileBtn">SAVE</button>
+                <button id="closeEditProfileBtn">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- JavaScript Functionality ---
+
+        const sosButton = document.getElementById('sosButton');
+        const statusModal = document.getElementById('statusModal');
+        const confirmOverlay = document.getElementById('confirmOverlay');
+        const confirmCancel = document.getElementById('confirmCancel');
+        const confirmOk = document.getElementById('confirmOk');
+
+        // --- 1. One-Tap SOS Button Logic ---
+        sosButton.addEventListener('click', () => {
+            // Show the confirmation modal instead of sending SOS directly
+            confirmOverlay.style.display = 'flex';
+        });
+        
+        // --- Modal Button Logic ---
+        confirmCancel.addEventListener('click', () => {
+            confirmOverlay.style.display = 'none';
+        });
+
+        confirmOk.addEventListener('click', () => {
+            confirmOverlay.style.display = 'none';
+            // Vibrate for feedback
+            if ('vibrate' in navigator) {
+                navigator.vibrate(200);
+            }
+            sendSOS("Button Pressed");
+        });
+
+
+        // --- 2. Shake Detection Logic ---
+        const shakeThreshold = 25; // Sensitivity: Higher means less sensitive
+        let lastX, lastY, lastZ;
+        let lastTimestamp = 0;
+        const shakeCooldown = 2000; // 2 seconds cooldown to prevent multiple alerts
+
+        function handleMotion(event) {
+            const currentTime = new Date().getTime();
+            if ((currentTime - lastTimestamp) < shakeCooldown) {
+                return; // Still in cooldown period
+            }
+            
+            const acceleration = event.accelerationIncludingGravity;
+            
+            if (lastX === undefined) {
+                lastX = acceleration.x;
+                lastY = acceleration.y;
+                lastZ = acceleration.z;
+                return;
+            }
+
+            const deltaX = Math.abs(acceleration.x - lastX);
+            const deltaY = Math.abs(acceleration.y - lastY);
+            const deltaZ = Math.abs(acceleration.z - lastZ);
+
+            if (deltaX > shakeThreshold || deltaY > shakeThreshold || deltaZ > shakeThreshold) {
+                console.log('Shake detected!');
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([200, 100, 200]); // Vibrate pattern for shake
+                }
+                sendSOS("Shake Detected");
+                lastTimestamp = currentTime; // Reset the timestamp
+            }
+
+            lastX = acceleration.x;
+            lastY = acceleration.y;
+            lastZ = acceleration.z;
+        }
+        
+        // Request permission for motion events on iOS 13.3+
+        function requestMotionPermission() {
+             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                             window.addEventListener('devicemotion', handleMotion);
+                             console.log('Motion permission granted.');
+                        } else {
+                            console.log('Motion permission denied.');
+                            showStatus('Shake to alert disabled. Please grant motion sensor permission.', 'error');
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                // Handle non-iOS 13.3+ devices or devices without this API
+                window.addEventListener('devicemotion', handleMotion);
+            }
+        }
+        
+        // Start listening for shake events
+        requestMotionPermission();
+
+
+        // --- 3. Main SOS Function (Gets Location and sends alert) ---
+        function sendSOS(triggerMethod) {
+            console.log(`SOS triggered by: ${triggerMethod}. Getting location...`);
+            showStatus('SOS TRIGGERED! Alerting contacts...', 'default');
+
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        const mapsLink = `https://www.google.com/maps?q=$${latitude},${longitude}`;
+                        
+                        const message = `Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink}`;
+                        console.log(message);
+
+                        // *HACKATHON INTEGRATION POINT*
+                        // Here you would send this 'message' to your backend or Firebase
+                        // to notify the trusted contacts (e.g., using Twilio for SMS).
+                        // For now, we'll just show it in a confirmation message.
+
+                        setTimeout(() => {
+                           showStatus('Alert sent with your location.', 'default');
+                        }, 1500);
+                    },
+                    (error) => {
+                        console.error("Error getting location:", error.message);
+                        showStatus('Could not get location. Please enable GPS.', 'error');
+                    },
+                    { enableHighAccuracy: true } // Request more accurate location
+                );
+            } else {
+                showStatus('Geolocation is not supported by your browser.', 'error');
+            }
+        }
+
+        // --- 4. UI Feedback Function (Status Modal) ---
+        function showStatus(message, type = 'default') {
+            statusModal.textContent = message;
+            statusModal.className = 'status-modal show';
+            
+            if (type === 'error') {
+                statusModal.classList.add('error');
+            }
+
+            // Hide the modal after 4 seconds
+            setTimeout(() => {
+                statusModal.classList.remove('show');
+            }, 4000);
+        }
+
+        // --- 5. Side Navigation Logic ---
+        const sideNav = document.getElementById('sideNav');
+        const navOverlay = document.getElementById('navOverlay');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+        const aboutAppBtn = document.getElementById('aboutAppBtn');
+        const aboutOverlay = document.getElementById('aboutOverlay');
+        const closeAboutBtn = document.getElementById('closeAboutBtn');
+
+        // Open side nav
+        hamburgerIcon.addEventListener('click', () => {
+            sideNav.classList.add('open');
+            navOverlay.classList.add('show');
+        });
+
+        // Function to close the side nav
+        function closeNav() {
+            sideNav.classList.remove('open');
+            navOverlay.classList.remove('show');
+        }
+        // Close nav when clicking the overlay
+        navOverlay.addEventListener('click', closeNav);
+
+        // --- "About App" Modal Logic ---
+        aboutAppBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent page from jumping
+            aboutOverlay.style.display = 'flex';
+            closeNav(); // Close the nav menu when opening the modal
+        });
+
+        // Hide About App modal
+        closeAboutBtn.addEventListener('click', () => {
+            aboutOverlay.style.display = 'none';
+        });
+
+        // --- New Edit Profile Modal Logic ---
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editProfileOverlay = document.getElementById('editProfileOverlay');
+        const closeEditProfileBtn = document.getElementById('closeEditProfileBtn');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const nameInput = document.getElementById('nameInput');
+        const userNameDisplay = document.querySelector('.nav-user-name');
+
+        // Open the Edit Profile modal when the "Edit Profile" link is clicked
+        editProfileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            editProfileOverlay.style.display = 'flex';
+            closeNav(); // Close the side nav when opening the modal
+        });
+
+        // Close the Edit Profile modal
+        closeEditProfileBtn.addEventListener('click', () => {
+            editProfileOverlay.style.display = 'none';
+        });
+
+        // Save the name and update the display
+        saveProfileBtn.addEventListener('click', () => {
+            const newName = nameInput.value;
+            if (newName.trim() !== '') {
+                userNameDisplay.textContent = newName;
+                showStatus('Profile updated successfully!', 'default');
+            }
+            editProfileOverlay.style.display = 'none';
+        });
+
+    </script>
 </body>
 </html>
