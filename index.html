@@ -593,6 +593,12 @@
                     About App
                 </a>
             </li>
+            <li>
+                <a href="#" id="signOutBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Sign Out
+                </a>
+            </li>
         </ul>
         <div class="nav-footer">
             Version 1.0.0
@@ -928,6 +934,7 @@
         const aboutAppBtn = document.getElementById('aboutAppBtn');
         const aboutOverlay = document.getElementById('aboutOverlay');
         const closeAboutBtn = document.getElementById('closeAboutBtn');
+        const signOutBtn = document.getElementById('signOutBtn');
 
         // Open side nav
         hamburgerIcon.addEventListener('click', () => {
@@ -954,6 +961,19 @@
         closeAboutBtn.addEventListener('click', () => {
             aboutOverlay.style.display = 'none';
         });
+        
+        // --- Sign Out Logic ---
+        signOutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Clear user data from local storage
+            localStorage.removeItem('userName');
+            localStorage.removeItem('emergencyContacts');
+            
+            // Reload the page to show the onboarding screen
+            window.location.reload();
+        });
+
 
         // --- New Profile Modals Logic ---
         const editProfileBtn = document.getElementById('editProfileBtn');
