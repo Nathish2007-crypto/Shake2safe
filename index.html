@@ -564,7 +564,6 @@
         
         <footer class="footer">
             <p>Shake2Save | A Code Warriors Project</p>
-            <button id="sirenButton" class="siren-button">Siren</button>
         </footer>
     </div>
 
@@ -1072,17 +1071,6 @@
             } else {
                 showStatus('Geolocation not supported.', 'error');
             }
-        });
-
-        // --- Siren Logic ---
-        const sirenButton = document.getElementById('sirenButton');
-        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); // A placeholder sound
-
-        sirenButton.addEventListener('click', () => {
-            audio.play().catch(error => {
-                console.error("Audio playback failed:", error);
-                showStatus('Siren playback failed. Check browser settings.', 'error');
-            });
         });
 
         // --- Live Safety Map Logic ---
