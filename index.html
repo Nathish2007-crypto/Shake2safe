@@ -11,7 +11,7 @@
     <style>
         /* CSS for styling the app */
         :root {
-            --primary-color: #c70000; /* Main red color */
+            --primary-color: #c70000;
             --background-color: #f0f2f5;
             --text-color: #333;
             --light-text-color: #666;
@@ -28,969 +28,242 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
+        .hidden { display: none !important; }
+
+        /* --- NEW: Onboarding Screens --- */
+        .onboarding-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--background-color); z-index: 6000;
+            display: flex; flex-direction: column; overflow-y: auto;
+        }
+        .onboarding-header {
+            background-color: var(--header-bg); padding: 15px; text-align: center;
+            font-size: 1.2em; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .onboarding-form {
+            padding: 20px; display: flex; flex-direction: column; gap: 15px; flex-grow: 1;
+        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 5px; font-weight: 600; color: var(--light-text-color); }
+        .form-group input {
+            padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+        }
+        .onboarding-form button {
+            margin-top: auto; /* Pushes button to the bottom */
+            padding: 15px; font-size: 1.1em; font-weight: 600;
+            color: white; background-color: var(--primary-color); border: none;
+            border-radius: 8px; cursor: pointer; transition: background-color 0.2s;
+        }
+        .contact-group {
+            background-color: #fff; padding: 15px; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 10px; text-align: left;
+        }
+        .contact-group h3 {
+            margin-top: 0; font-size: 1.1em; border-bottom: 1px solid #eee;
+            padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .contact-group h3 span { font-weight: 500; font-size: 0.9em; color: var(--light-text-color); }
         
-        /* --- Header --- */
-        .header {
-            background-color: var(--header-bg);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .header-title {
-            font-weight: 600;
-            font-size: 1.1em;
-            color: var(--text-color);
-        }
-        .header-icon {
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-
-        /* --- Main Content --- */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
-        }
-        
-        .title {
-            font-size: 2em;
-            font-weight: 700;
-            color: #5d2b2b;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            font-size: 1.2em;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-        }
-        
-        /* --- SOS Emergency Button --- */
-        .sos-button-container {
-            position: relative;
-            width: 200px; /* Adjust size as needed */
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        
-        .sos-button {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ff4b4b, var(--primary-color));
-            border: 8px solid #fff;
-            box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4);
-            color: white;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 1;
-        }
-        
-        .sos-button:active {
-            transform: scale(0.95);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .pulsing-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 10px solid rgba(200, 0, 0, 0.3);
-            animation: pulse 2s infinite;
-            z-index: 0;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.4);
-                opacity: 0;
-            }
-        }
-        
-        .info-text {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: var(--light-text-color);
-            margin-bottom: 40px;
-        }
-
-        /* --- Additional Buttons --- */
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .report-button {
-            padding: 12px 25px;
-            border: none;
-            background-color: #3f51b5;
-            color: white;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .siren-button {
-            padding: 12px 25px;
-            border: none;
-            background-color: #ff9800;
-            color: white;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .powered-by {
-            font-size: 0.9em;
-            color: #999;
-        }
-
-        .powered-by img {
-            width: 50px; /* Placeholder for your logo */
-            margin-top: 10px;
-        }
-
-        /* --- Footer --- */
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.9em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* --- Status Message Modal --- */
-        .status-modal {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 2000;
-            transition: top 0.5s ease-in-out;
-            font-weight: 600;
-        }
-
-        .status-modal.show {
-            top: 20px;
-        }
-
-        .status-modal.error {
-            background-color: var(--primary-color);
-        }
-
-        /* --- Generic Modal Overlay --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none; /* Hidden by default */
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-        }
-
-        /* --- Confirmation Modal --- */
-        .confirm-modal {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 320px;
-        }
-        
-        #confirmOverlay .confirm-modal p {
-            font-weight: 600;
-            font-size: 1.1em;
-            color: var(--text-color);
-            margin-bottom: 25px;
-        }
-
-        .confirm-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .confirm-buttons button {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .confirm-buttons button:hover {
-            opacity: 0.9;
-        }
-
-        #confirmCancel {
-            background-color: var(--primary-color);
-        }
-
-        #confirmOk {
-            background-color: #28a745;
-        }
-
-        /* --- Side Navigation Menu --- */
-        .side-nav {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Hidden by default */
-            width: 280px;
-            height: 100%;
-            background-color: #fff;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-            z-index: 4000;
-            transition: left 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .side-nav.open {
-            left: 0;
-        }
-
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 3999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
-
-        .nav-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .nav-profile {
-            background: linear-gradient(to bottom, #e0e0e0, #ffffff);
-            padding: 30px 20px;
-            text-align: center;
-        }
-
-        .nav-profile-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 4px solid var(--primary-color);
-            margin: 0 auto 15px;
-            background-image: url('https://placehold.co/100x100/ffffff/333?text=G');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .nav-user-name {
-            font-weight: 700;
-            font-size: 1.2em;
-            margin: 0;
-            color: var(--text-color);
-        }
-
-        .nav-user-phone {
-            font-size: 0.9em;
-            color: var(--light-text-color);
-            margin: 5px 0 0;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 15px 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-
-        .nav-links li a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 1em;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .nav-links li a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .nav-footer {
-            padding: 20px;
-            text-align: center;
-            font-size: 0.8em;
-            color: #999;
-            border-top: 1px solid #ddd;
-        }
-        
-        /* --- About App Modal --- */
-        .about-modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .about-modal-content h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-        .about-modal-content h3 {
-            margin-top: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        .about-modal-content p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .about-modal-content ul {
-            list-style-type: '✓';
-            padding-left: 20px;
-        }
-        .about-modal-content li {
-            padding-left: 10px;
-            margin-bottom: 10px;
-        }
-        .close-btn {
-            display: block;
-            margin: 20px auto 0;
-            padding: 10px 30px;
-            border: none;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* --- Modals --- */
-        #editProfileOverlay .confirm-buttons button {
-             width: 48%;
-        }
-
-        #editMenuOverlay, #editNameOverlay, #editContactsOverlay, #reportModalOverlay, #mapModalOverlay {
-            display: none;
-        }
-
-        .edit-menu button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            background-color: #f8f8f8;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .contact-input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .contact-input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            color: var(--light-text-color);
-        }
-        .contact-input-group input {
-            width: 95%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #map-container {
-            width: 100%;
-            height: 90vh; /* Make the map container fill most of the screen */
-            background-color: #e0e0e0;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .map-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-        }
-
+        /* --- YOUR EXISTING APP CSS --- */
+        .header { background-color: var(--header-bg); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .header-title { font-weight: 600; font-size: 1.1em; color: var(--text-color); }
+        .header-icon { font-size: 1.5em; cursor: pointer; }
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); }
+        .title { font-size: 2em; font-weight: 700; color: #5d2b2b; margin-bottom: 5px; }
+        .subtitle { font-size: 1.2em; color: var(--primary-color); margin-bottom: 30px; }
+        .sos-button-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
+        .sos-button { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, #ff4b4b, var(--primary-color)); border: 8px solid #fff; box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4); color: white; font-size: 2.5em; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; z-index: 1; }
+        .pulsing-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 10px solid rgba(200, 0, 0, 0.3); animation: pulse 2s infinite; z-index: 0; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+        /* ... All of your other 700+ lines of CSS go here ... */
     </style>
 </head>
 <body>
-    <header class="header">
-        <span class="header-icon" id="hamburgerIcon">☰</span>
-        <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
-        <span class="header-icon">🔔</span>
-    </header>
 
-    <main class="main-content">
-        <h1 class="title">SHAKE2SAVE</h1>
-        <p class="subtitle">Press the Button or Shake in Emergency</p>
-
-        <div class="sos-button-container">
-            <div class="pulsing-ring"></div>
-            <button id="sosButton" class="sos-button">SOS</button>
-        </div>
-
-        <p class="info-text">You will alert your trusted contacts.</p>
-
-        <div class="button-group">
-            <button id="reportButton" class="report-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                Quick Report
-            </button>
-        </div>
-
-        <div class="powered-by">
-            <p>POWERED BY</p>
-            <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
-        </div>
-    </main>
-    
-    <footer class="footer">
-        <p>Shake2Save | A Code Warriors Project</p>
-        <button id="sirenButton" class="siren-button">Siren</button>
-    </footer>
-
-    <div id="sideNav" class="side-nav">
-        <div class="nav-profile">
-            <div class="nav-profile-img"></div>
-            <h3 class="nav-user-name">Your Name</h3>
-            <p class="nav-user-phone">8668012126</p>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="#" id="editProfileBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                    Edit Profile
-                </a>
-            </li>
-            <li>
-                <a href="#" id="mapBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-                    Live Safety Map
-                </a>
-            </li>
-            <li>
-                <a href="#" id="aboutAppBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    About App
-                </a>
-            </li>
-        </ul>
-        <div class="nav-footer">
-            Version 1.0.0
-        </div>
-    </div>
-    <div id="navOverlay" class="nav-overlay"></div>
-
-    <div id="statusModal" class="status-modal"></div>
-
-    <div id="confirmOverlay" class="modal-overlay">
-        <div class="confirm-modal">
-            <h2 id="confirmTitle">Emergency Alert Trigger</h2>
-            <p id="countdownMessage">Alert will be sent in 5 seconds.</p>
-            <div class="confirm-buttons">
-                <button id="confirmCancel">CANCEL</button>
-                <button id="confirmOk" style="display:none;">OK</button>
+    <!-- Onboarding: Registration Screen -->
+    <div id="registrationScreen" class="onboarding-screen">
+        <div class="onboarding-header">CREATE YOUR PROFILE</div>
+        <form id="registrationForm" class="onboarding-form">
+            <div class="form-group">
+                <label for="userNameInput">Name (Mandatory)</label>
+                <input type="text" id="userNameInput" placeholder="Enter your full name" required>
             </div>
-        </div>
-    </div>
-
-    <div id="aboutOverlay" class="modal-overlay">
-        <div class="about-modal-content">
-            <h2>About Shake2Save</h2>
-            <p>Our solution is Shake2Save, a Progressive Web App (PWA) designed to make women's safety faster, simpler, and more accessible.</p>
-            <h3>Key Highlights:</h3>
-            <ul>
-                <li><strong>Lightweight PWA:</strong> Works directly from the browser and can be added to the home screen — no installation barrier.</li>
-                <li><strong>Live Safety Map:</strong> Shows safe/unsafe zones based on crowdsourced reports and public data.</li>
-                <li><strong>Quick Reporting:</strong> Allows users to mark unsafe areas with a single tap.</li>
-                <li><strong>Shake-to-Alert (Unique Feature):</strong> Just shake the phone to instantly send your live location and an SOS message.</li>
-                <li><strong>One-Tap SOS Button:</strong> A large, visible emergency button is always accessible for manual triggering.</li>
-            </ul>
-            <button id="closeAboutBtn" class="close-btn">Close</button>
-        </div>
-    </div>
-
-    <div id="editMenuOverlay" class="modal-overlay">
-        <div class="confirm-modal edit-menu">
-            <h2>Edit Profile</h2>
-            <button id="editNameBtn">Edit Name</button>
-            <button id="editContactsBtn">Edit Contacts</button>
-            <button id="closeMenuBtn" style="background-color: var(--primary-color); color: white;">Close</button>
-        </div>
-    </div>
-
-    <div id="editNameOverlay" class="modal-overlay">
-        <div class="confirm-modal">
-            <h2>Edit Name</h2>
-            <p>Enter your full name and save it.</p>
-            <input type="text" id="nameInput" placeholder="Enter your name" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-            <div class="confirm-buttons">
-                <button id="saveNameBtn">SAVE</button>
-                <button id="closeNameBtn">CANCEL</button>
+            <div class="form-group">
+                <label for="userPhoneInput">Your Mobile Number (Mandatory)</label>
+                <input type="tel" id="userPhoneInput" placeholder="Enter 10-digit number" required pattern="[0-9]{10}">
             </div>
-        </div>
+            <button type="submit">NEXT</button>
+        </form>
+    </div>
+
+    <!-- Onboarding: Emergency Contacts Screen -->
+    <div id="contactsScreen" class="onboarding-screen hidden">
+        <div class="onboarding-header">EMERGENCY CONTACTS</div>
+        <form id="contactsForm" class="onboarding-form">
+            <div class="contact-group">
+                <h3>Contact - 1 <span>(Mandatory)</span></h3>
+                <input type="tel" id="contact1" placeholder="Enter 10-digit number" required pattern="[0-9]{10}">
+            </div>
+            <div class="contact-group">
+                <h3>Contact - 2 <span>(Mandatory)</span></h3>
+                <input type="tel" id="contact2" placeholder="Enter 10-digit number" required pattern="[0-9]{10}">
+            </div>
+            <div class="contact-group">
+                <h3>Contact - 3 <span>(Optional)</span></h3>
+                <input type="tel" id="contact3" placeholder="Enter 10-digit number" pattern="[0-9]{10}">
+            </div>
+            <button type="submit">FINISH SETUP</button>
+        </form>
+    </div>
+
+    <!-- YOUR MAIN APP (Initially hidden) -->
+    <div id="mainApp" class="hidden" style="display: flex; flex-direction: column; min-height: 100vh;">
+        <header class="header">
+             <span class="header-icon" id="hamburgerIcon">☰</span>
+             <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
+             <span class="header-icon">🔔</span>
+        </header>
+        <main class="main-content">
+             <h1 class="title">SHAKE2SAVE</h1>
+             <p class="subtitle">Press the Button or Shake in Emergency</p>
+             <div class="sos-button-container">
+                 <div class="pulsing-ring"></div>
+                 <button id="sosButton" class="sos-button">SOS</button>
+             </div>
+             <p class="info-text">You will alert your trusted contacts.</p>
+             <div class="button-group">
+                 <button id="reportButton" class="report-button">Quick Report</button>
+             </div>
+             <div class="powered-by">
+                 <p>POWERED BY</p>
+                 <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
+             </div>
+        </main>
+        <footer class="footer">
+             <p>Shake2Save | A Code Warriors Project</p>
+             <button id="sirenButton" class="siren-button">Siren</button>
+        </footer>
+        <!-- All your modals and side nav HTML would go here -->
     </div>
     
-    <div id="editContactsOverlay" class="modal-overlay">
-        <div class="confirm-modal">
-            <h2>Edit Contacts</h2>
-            <p>Enter up to three emergency phone numbers.</p>
-            <div class="contact-input-group">
-                <label for="contact1">Contact 1</label>
-                <input type="tel" id="contact1" placeholder="e.g., +15551234567">
-            </div>
-            <div class="contact-input-group">
-                <label for="contact2">Contact 2</label>
-                <input type="tel" id="contact2" placeholder="e.g., +15551234567">
-            </div>
-            <div class="contact-input-group">
-                <label for="contact3">Contact 3</label>
-                <input type="tel" id="contact3" placeholder="e.g., +15551234567">
-            </div>
-            <div class="confirm-buttons">
-                <button id="saveContactsBtn">SAVE</button>
-                <button id="closeContactsBtn">CANCEL</button>
-            </div>
-        </div>
-    </div>
+    <!-- ============================================= -->
+    <!-- ============== SCRIPT BLOCKS ================ -->
+    <!-- ============================================= -->
+
+    <!-- STEP 1: ADD FIREBASE SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        // --- PASTE YOUR FIREBASE CONFIG HERE ---
+        const firebaseConfig = {
+            /* Your config object */
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- Make Firestore functions globally accessible ---
+        window.db = {
+            saveUserData: (userId, userData) => setDoc(doc(db, "users", userId), userData, { merge: true }),
+            getUserData: (userId) => getDoc(doc(db, "users", userId)),
+            addReport: (reportData) => addDoc(collection(db, "reports"), reportData),
+            getReports: () => getDocs(collection(db, "reports")),
+            serverTimestamp: serverTimestamp
+        };
+    </script>
     
-    <div id="reportModalOverlay" class="modal-overlay">
-        <div class="confirm-modal">
-            <h2>Report Unsafe Area</h2>
-            <p>Are you sure you want to report this location as unsafe?</p>
-            <div class="confirm-buttons">
-                <button id="reportCancel">CANCEL</button>
-                <button id="reportConfirm">CONFIRM</button>
-            </div>
-        </div>
-    </div>
+    <!-- STEP 2: ADD GOOGLE MAPS API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=visualization&callback=initMap" defer></script>
 
-    <div id="mapModalOverlay" class="modal-overlay">
-        <div class="about-modal-content">
-            <div class="map-header">
-                <h2>Live Safety Map</h2>
-                <button id="closeMapBtn" class="close-btn" style="margin: 0; padding: 5px 15px;">Close</button>
-            </div>
-            <div id="map-container">
-                </div>
-        </div>
-    </div>
-
-
+    <!-- STEP 3: MAIN APPLICATION JAVASCRIPT -->
     <script>
-        // --- JavaScript Functionality ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            const registrationScreen = document.getElementById('registrationScreen');
+            const contactsScreen = document.getElementById('contactsScreen');
+            const mainApp = document.getElementById('mainApp');
+            const registrationForm = document.getElementById('registrationForm');
+            const contactsForm = document.getElementById('contactsForm');
 
-        const sosButton = document.getElementById('sosButton');
-        const statusModal = document.getElementById('statusModal');
-        const confirmOverlay = document.getElementById('confirmOverlay');
-        const confirmCancel = document.getElementById('confirmCancel');
-        const confirmOk = document.getElementById('confirmOk');
-        let countdownInterval;
+            // --- 1. Check if user is already registered ---
+            let userId = localStorage.getItem('shake2save_userId');
+            const isRegistered = localStorage.getItem('shake2save_isRegistered') === 'true';
 
-        // --- 1. One-Tap SOS Button Logic with Countdown ---
-        sosButton.addEventListener('click', () => {
-            const confirmTitle = document.getElementById('confirmTitle');
-            const countdownMessage = document.getElementById('countdownMessage');
+            if (!userId) {
+                userId = 'user_' + Date.now(); // More robust unique ID
+                localStorage.setItem('shake2save_userId', userId);
+            }
             
-            // Show the confirmation modal
-            confirmOverlay.style.display = 'flex';
-            confirmOk.style.display = 'none'; // Hide the OK button
-            
-            let timeLeft = 5;
-            countdownMessage.textContent = `Alert will be sent in ${timeLeft} seconds.`;
+            // Wait for Firestore to be initialized
+            while (!window.db) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
 
-            countdownInterval = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) {
-                    countdownMessage.textContent = `Alert will be sent in ${timeLeft} seconds.`;
-                } else {
-                    clearInterval(countdownInterval);
-                    confirmOverlay.style.display = 'none';
-                    sendSOS("Button Pressed");
+            if (isRegistered) {
+                registrationScreen.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                // You would load user data here to populate side nav etc.
+            } else {
+                registrationScreen.classList.remove('hidden');
+            }
+
+            // --- 2. Handle Registration Form Submission ---
+            registrationForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userName = document.getElementById('userNameInput').value.trim();
+                const userPhone = document.getElementById('userPhoneInput').value.trim();
+
+                if (!userName || !userPhone || !/^\d{10}$/.test(userPhone)) {
+                    alert('Please enter a valid name and 10-digit phone number.');
+                    return;
                 }
-            }, 1000);
-        });
-        
-        // --- Modal Button Logic ---
-        confirmCancel.addEventListener('click', () => {
-            clearInterval(countdownInterval);
-            confirmOverlay.style.display = 'none';
-            showStatus('Alert cancelled.', 'default');
-        });
 
-
-        // --- 2. Shake Detection Logic ---
-        const shakeThreshold = 25; // Sensitivity: Higher means less sensitive
-        let lastX, lastY, lastZ;
-        let lastTimestamp = 0;
-        const shakeCooldown = 2000; // 2 seconds cooldown to prevent multiple alerts
-
-        function handleMotion(event) {
-            const currentTime = new Date().getTime();
-            if ((currentTime - lastTimestamp) < shakeCooldown) {
-                return; // Still in cooldown period
-            }
-            
-            const acceleration = event.accelerationIncludingGravity;
-            
-            if (lastX === undefined) {
-                lastX = acceleration.x;
-                lastY = acceleration.y;
-                lastZ = acceleration.z;
-                return;
-            }
-
-            const deltaX = Math.abs(acceleration.x - lastX);
-            const deltaY = Math.abs(acceleration.y - lastY);
-            const deltaZ = Math.abs(acceleration.z - lastZ);
-
-            if (deltaX > shakeThreshold || deltaY > shakeThreshold || deltaZ > shakeThreshold) {
-                console.log('Shake detected!');
-                if ('vibrate' in navigator) {
-                    navigator.vibrate([200, 100, 200]); // Vibrate pattern for shake
+                try {
+                    await window.db.saveUserData(userId, { name: userName, phone: userPhone });
+                    registrationScreen.classList.add('hidden');
+                    contactsScreen.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error saving user data: ", error);
+                    alert("Could not save profile. Please try again.");
                 }
-                sendSOS("Shake Detected");
-                lastTimestamp = currentTime; // Reset the timestamp
-            }
-
-            lastX = acceleration.x;
-            lastY = acceleration.y;
-            lastZ = acceleration.z;
-        }
-        
-        // Request permission for motion events on iOS 13.3+
-        function requestMotionPermission() {
-             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                             window.addEventListener('devicemotion', handleMotion);
-                             console.log('Motion permission granted.');
-                        } else {
-                            console.log('Motion permission denied.');
-                            showStatus('Shake to alert disabled. Please grant motion sensor permission.', 'error');
-                        }
-                    })
-                    .catch(console.error);
-            } else {
-                // Handle non-iOS 13.3+ devices or devices without this API
-                window.addEventListener('devicemotion', handleMotion);
-            }
-        }
-        
-        // Start listening for shake events
-        requestMotionPermission();
-
-
-        // --- 3. Main SOS Function (Gets Location and sends alert) ---
-        function sendSOS(triggerMethod) {
-            console.log(`SOS triggered by: ${triggerMethod}. Getting location...`);
-            showStatus('SOS TRIGGERED! Alerting contacts...', 'default');
-
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        const mapsLink = `http://googleusercontent.com/maps.google.com/5{latitude},${longitude}`;
-                        
-                        const message = `Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink}`;
-                        console.log(message);
-                        
-                        // **Backend Integration Point (with contacts)**
-                        const emergencyContacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
-
-                        console.log('Sending alert to contacts:', emergencyContacts);
-
-                        setTimeout(() => {
-                           showStatus('Alert sent with your location.', 'default');
-                        }, 1500);
-                    },
-                    (error) => {
-                        console.error("Error getting location:", error.message);
-                        showStatus('Could not get location. Please enable GPS.', 'error');
-                    },
-                    { enableHighAccuracy: true } // Request more accurate location
-                );
-            } else {
-                showStatus('Geolocation is not supported by your browser.', 'error');
-            }
-        }
-
-        // --- 4. UI Feedback Function (Status Modal) ---
-        function showStatus(message, type = 'default') {
-            statusModal.textContent = message;
-            statusModal.className = 'status-modal show';
-            
-            if (type === 'error') {
-                statusModal.classList.add('error');
-            }
-
-            // Hide the modal after 4 seconds
-            setTimeout(() => {
-                statusModal.classList.remove('show');
-            }, 4000);
-        }
-
-        // --- 5. Side Navigation Logic ---
-        const sideNav = document.getElementById('sideNav');
-        const navOverlay = document.getElementById('navOverlay');
-        const hamburgerIcon = document.getElementById('hamburgerIcon');
-        const aboutAppBtn = document.getElementById('aboutAppBtn');
-        const aboutOverlay = document.getElementById('aboutOverlay');
-        const closeAboutBtn = document.getElementById('closeAboutBtn');
-
-        // Open side nav
-        hamburgerIcon.addEventListener('click', () => {
-            sideNav.classList.add('open');
-            navOverlay.classList.add('show');
-        });
-
-        // Function to close the side nav
-        function closeNav() {
-            sideNav.classList.remove('open');
-            navOverlay.classList.remove('show');
-        }
-        // Close nav when clicking the overlay
-        navOverlay.addEventListener('click', closeNav);
-
-        // --- "About App" Modal Logic ---
-        aboutAppBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent page from jumping
-            aboutOverlay.style.display = 'flex';
-            closeNav(); // Close the nav menu when opening the modal
-        });
-
-        // Hide About App modal
-        closeAboutBtn.addEventListener('click', () => {
-            aboutOverlay.style.display = 'none';
-        });
-
-        // --- New Profile Modals Logic ---
-        const editProfileBtn = document.getElementById('editProfileBtn');
-        const editMenuOverlay = document.getElementById('editMenuOverlay');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const editNameBtn = document.getElementById('editNameBtn');
-        const editContactsBtn = document.getElementById('editContactsBtn');
-        
-        // Name Modal
-        const editNameOverlay = document.getElementById('editNameOverlay');
-        const closeNameBtn = document.getElementById('closeNameBtn');
-        const saveNameBtn = document.getElementById('saveNameBtn');
-        const nameInput = document.getElementById('nameInput');
-        const userNameDisplay = document.querySelector('.nav-user-name');
-        
-        // Contacts Modal
-        const editContactsOverlay = document.getElementById('editContactsOverlay');
-        const closeContactsBtn = document.getElementById('closeContactsBtn');
-        const saveContactsBtn = document.getElementById('saveContactsBtn');
-        const contact1Input = document.getElementById('contact1');
-        const contact2Input = document.getElementById('contact2');
-        const contact3Input = document.getElementById('contact3');
-
-        // Pre-fill contacts if they exist
-        function loadContacts() {
-            const savedContacts = JSON.parse(localStorage.getItem('emergencyContacts'));
-            if (savedContacts) {
-                contact1Input.value = savedContacts[0] || '';
-                contact2Input.value = savedContacts[1] || '';
-                contact3Input.value = savedContacts[2] || '';
-            }
-        }
-        loadContacts();
-
-        // Open the Edit Profile Menu
-        editProfileBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            editMenuOverlay.style.display = 'flex';
-            closeNav();
-        });
-
-        // Close the Edit Profile Menu
-        closeMenuBtn.addEventListener('click', () => {
-            editMenuOverlay.style.display = 'none';
-        });
-
-        // Open the Edit Name modal from the menu
-        editNameBtn.addEventListener('click', () => {
-            editMenuOverlay.style.display = 'none';
-            editNameOverlay.style.display = 'flex';
-        });
-        
-        // Open the Edit Contacts modal from the menu
-        editContactsBtn.addEventListener('click', () => {
-            editMenuOverlay.style.display = 'none';
-            editContactsOverlay.style.display = 'flex';
-        });
-
-        // Close the Edit Name modal
-        closeNameBtn.addEventListener('click', () => {
-            editNameOverlay.style.display = 'none';
-        });
-
-        // Save the name and update the display
-        saveNameBtn.addEventListener('click', () => {
-            const newName = nameInput.value;
-            if (newName.trim() !== '') {
-                userNameDisplay.textContent = newName;
-                showStatus('Name updated successfully!', 'default');
-            }
-            editNameOverlay.style.display = 'none';
-        });
-        
-        // Close the Edit Contacts modal
-        closeContactsBtn.addEventListener('click', () => {
-            editContactsOverlay.style.display = 'none';
-        });
-
-        // Save the contacts and update localStorage
-        saveContactsBtn.addEventListener('click', () => {
-            const contacts = [
-                contact1Input.value,
-                contact2Input.value,
-                contact3Input.value
-            ].filter(contact => contact.trim() !== ''); // Filter out empty strings
-            
-            // For a real app, this is where you'd send contacts to a backend database.
-            // For now, we save them to the browser's local storage.
-            localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
-            
-            if (contacts.length > 0) {
-                 showStatus(`Saved ${contacts.length} contacts.`, 'default');
-            } else {
-                 showStatus('No contacts saved.', 'error');
-            }
-
-            editContactsOverlay.style.display = 'none';
-        });
-        
-        // --- Quick Report Logic ---
-        const reportButton = document.getElementById('reportButton');
-        const reportModalOverlay = document.getElementById('reportModalOverlay');
-        const reportCancel = document.getElementById('reportCancel');
-        const reportConfirm = document.getElementById('reportConfirm');
-
-        reportButton.addEventListener('click', () => {
-            reportModalOverlay.style.display = 'flex';
-        });
-
-        reportCancel.addEventListener('click', () => {
-            reportModalOverlay.style.display = 'none';
-        });
-
-        reportConfirm.addEventListener('click', () => {
-            reportModalOverlay.style.display = 'none';
-            showStatus('Reporting unsafe location...', 'default');
-            
-            // This is where you would send the report to a backend.
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        console.log(`Unsafe location reported at: ${latitude}, ${longitude}`);
-                        showStatus('Location reported successfully.', 'default');
-                    },
-                    (error) => {
-                        console.error("Error reporting location:", error.message);
-                        showStatus('Could not report location. Please enable GPS.', 'error');
-                    },
-                    { enableHighAccuracy: true }
-                );
-            } else {
-                showStatus('Geolocation not supported.', 'error');
-            }
-        });
-
-        // --- Siren Logic ---
-        const sirenButton = document.getElementById('sirenButton');
-        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); // A placeholder sound
-
-        sirenButton.addEventListener('click', () => {
-            audio.play().catch(error => {
-                console.error("Audio playback failed:", error);
-                showStatus('Siren playback failed. Check browser settings.', 'error');
             });
+
+            // --- 3. Handle Contacts Form Submission ---
+            contactsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const contact1 = document.getElementById('contact1').value.trim();
+                const contact2 = document.getElementById('contact2').value.trim();
+                const contact3 = document.getElementById('contact3').value.trim();
+
+                if (!contact1 || !contact2 || !/^\d{10}$/.test(contact1) || !/^\d{10}$/.test(contact2)) {
+                    alert('Please enter at least two valid 10-digit emergency contacts.');
+                    return;
+                }
+
+                const emergencyContacts = [contact1, contact2, contact3].filter(c => c);
+
+                try {
+                    await window.db.saveUserData(userId, { emergencyContacts });
+                    localStorage.setItem('shake2save_isRegistered', 'true');
+                    contactsScreen.classList.add('hidden');
+                    mainApp.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error saving contacts: ", error);
+                    alert("Could not save contacts. Please try again.");
+                }
+            });
+
+            // --- 4. Your existing main app logic (SOS button, modals, side nav, etc.) goes here ---
+            // ... (The rest of your 700+ lines of JavaScript)
         });
 
-        // --- Live Safety Map Logic ---
-        const mapBtn = document.getElementById('mapBtn');
-        const mapModalOverlay = document.getElementById('mapModalOverlay');
-        const closeMapBtn = document.getElementById('closeMapBtn');
-
-        mapBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            mapModalOverlay.style.display = 'flex';
-            closeNav();
-            
-            // **MAP INTEGRATION POINT**
-            // This is where you would initialize the map from a service like Google Maps.
-            // You would insert your map code here.
-            // Example: initMap();
-        });
-
-        closeMapBtn.addEventListener('click', () => {
-            mapModalOverlay.style.display = 'none';
-        });
-
+        // Your global functions like initMap, showStatus, etc. would be here
+        function initMap() {
+            // Map initialization logic
+        }
     </script>
 </body>
 </html>
+
