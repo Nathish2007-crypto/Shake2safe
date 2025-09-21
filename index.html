@@ -138,34 +138,6 @@
             color: var(--light-text-color);
             margin-bottom: 40px;
         }
-
-        /* --- Additional Buttons --- */
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .report-button {
-            padding: 12px 25px;
-            border: none;
-            background-color: #3f51b5;
-            color: white;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .siren-button {
-            padding: 12px 25px;
-            border: none;
-            background-color: #ff9800;
-            color: white;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
         
         .powered-by {
             font-size: 0.9em;
@@ -184,10 +156,6 @@
             padding: 10px;
             text-align: center;
             font-size: 0.9em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
         }
 
         /* --- Status Message Modal --- */
@@ -238,12 +206,16 @@
             width: 90%;
             max-width: 320px;
         }
-        
-        #confirmOverlay .confirm-modal p {
-            font-weight: 600;
-            font-size: 1.1em;
+
+        .confirm-modal h2 {
+            margin-top: 0;
+            font-size: 1.2em;
             color: var(--text-color);
+        }
+        
+        .confirm-modal p {
             margin-bottom: 25px;
+            color: var(--light-text-color);
         }
 
         .confirm-buttons {
@@ -423,33 +395,8 @@
              width: 48%;
         }
 
-        #onboarding, #editMenuOverlay, #editNameOverlay, #editContactsOverlay, #reportModalOverlay, #mapModalOverlay {
+        #editMenuModal, #editContactsModal {
             display: none;
-        }
-
-        #onboarding.show {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
-        }
-        
-        #onboarding .confirm-modal {
-            max-width: 350px;
-            padding: 30px;
-        }
-        
-        #onboarding h1 {
-            color: var(--primary-color);
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-        
-        #onboarding p {
-            color: var(--light-text-color);
-            font-size: 1em;
-            margin-bottom: 25px;
         }
 
         .edit-menu button {
@@ -481,80 +428,412 @@
             border: 1px solid #ccc;
         }
 
-        #map-container {
-            width: 100%;
-            height: 90vh; /* Make the map container fill most of the screen */
-            background-color: #e0e0e0;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .map-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-        }
-        
-        .main-app {
-            display: none;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
     </style>
 </head>
 <body>
+    <header class="header">
+        <span class="header-icon" id="hamburgerIcon">☰</span>
+        <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
+        <span class="header-icon">🔔</span>
+    </header>
+
+    <main class="main-content">
+        <h1 class="title">SHAKE2SAVE</h1>
+        <p class="subtitle">Press the Button or Shake in Emergency</p>
+
+        <div class="sos-button-container">
+            <div class="pulsing-ring"></div>
+            <button id="sosButton" class="sos-button">SOS</button>
+        </div>
+
+        <p class="info-text">You will alert your trusted contacts.</p>
+
+        <div class="powered-by">
+            <p>POWERED BY</p>
+            <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
+        </div>
+    </main>
     
-    <div id="onboarding" class="modal-overlay show">
+    <footer class="footer">
+        <p>Shake2Save | A Code Warriors Project</p>
+    </footer>
+
+    <div id="sideNav" class="side-nav">
+        <div class="nav-profile">
+            <div class="nav-profile-img"></div>
+            <h3 class="nav-user-name">Your Name</h3>
+            <p class="nav-user-phone">8668012126</p>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#" id="editProfileBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    Edit Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" id="aboutAppBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    About App
+                </a>
+            </li>
+        </ul>
+        <div class="nav-footer">
+            Version 1.0.0
+        </div>
+    </div>
+    <div id="navOverlay" class="nav-overlay"></div>
+
+    <div id="statusModal" class="status-modal"></div>
+
+    <div id="confirmOverlay" class="modal-overlay">
         <div class="confirm-modal">
-            <h1>Welcome to Shake2Save!</h1>
-            <p>Please enter your details to get started.</p>
+            <h2>Emergency Alert Trigger</h2>
+            <p>To confirm the emergency alert, press 'OK'. If you pressed this by mistake, press 'CANCEL'.</p>
+            <div class="confirm-buttons">
+                <button id="confirmCancel">CANCEL</button>
+                <button id="confirmOk">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="aboutOverlay" class="modal-overlay">
+        <div class="about-modal-content">
+            <h2>About Shake2Save</h2>
+            <p>Our solution is Shake2Save, a Progressive Web App (PWA) designed to make women's safety faster, simpler, and more accessible.</p>
+            <h3>Key Highlights:</h3>
+            <ul>
+                <li><strong>Lightweight PWA:</strong> Works directly from the browser and can be added to the home screen — no installation barrier.</li>
+                <li><strong>Live Safety Map:</strong> Shows safe/unsafe zones based on crowdsourced reports and public data.</li>
+                <li><strong>Quick Reporting:</strong> Allows users to mark unsafe areas with a single tap.</li>
+                <li><strong>Shake-to-Alert (Unique Feature):</strong> Just shake the phone to instantly send your live location and an SOS message.</li>
+                <li><strong>One-Tap SOS Button:</strong> A large, visible emergency button is always accessible for manual triggering.</li>
+            </ul>
+            <button id="closeAboutBtn" class="close-btn">Close</button>
+        </div>
+    </div>
+
+    <div id="editMenuOverlay" class="modal-overlay">
+        <div class="confirm-modal edit-menu">
+            <h2>Edit Profile</h2>
+            <button id="editNameBtn">Edit Name</button>
+            <button id="editContactsBtn">Edit Contacts</button>
+            <button id="closeMenuBtn" style="background-color: var(--primary-color); color: white;">Close</button>
+        </div>
+    </div>
+
+    <div id="editNameOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Edit Name</h2>
+            <p>Enter your full name and save it.</p>
+            <input type="text" id="nameInput" placeholder="Enter your name" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <div class="confirm-buttons">
+                <button id="saveNameBtn">SAVE</button>
+                <button id="closeNameBtn">CANCEL</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="editContactsOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Edit Contacts</h2>
+            <p>Enter up to three emergency phone numbers.</p>
             <div class="contact-input-group">
-                <label for="onboardingName">Your Name</label>
-                <input type="text" id="onboardingName" placeholder="Enter your full name">
+                <label for="contact1">Contact 1</label>
+                <input type="tel" id="contact1" placeholder="e.g., +15551234567">
             </div>
             <div class="contact-input-group">
-                <label for="onboardingContact1">Emergency Contact 1</label>
-                <input type="tel" id="onboardingContact1" placeholder="Phone number">
+                <label for="contact2">Contact 2</label>
+                <input type="tel" id="contact2" placeholder="e.g., +15551234567">
             </div>
             <div class="contact-input-group">
-                <label for="onboardingContact2">Emergency Contact 2</label>
-                <input type="tel" id="onboardingContact2" placeholder="Phone number">
+                <label for="contact3">Contact 3</label>
+                <input type="tel" id="contact3" placeholder="e.g., +15551234567">
             </div>
-            <div class="contact-input-group">
-                <label for="onboardingContact3">Emergency Contact 3</label>
-                <input type="tel" id="onboardingContact3" placeholder="Phone number">
+            <div class="confirm-buttons">
+                <button id="saveContactsBtn">SAVE</button>
+                <button id="closeContactsBtn">CANCEL</button>
             </div>
-            <button id="onboardingStartBtn" class="close-btn" style="width: 100%;">START</button>
         </div>
     </div>
 
 
-    <div class="main-app" id="mainAppContainer">
-        <header class="header">
-            <span class="header-icon" id="hamburgerIcon">☰</span>
-            <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
-            <span class="header-icon">🔔</span>
-        </header>
+    <script>
+        // --- JavaScript Functionality ---
 
-        <main class="main-content">
-            <h1 class="title">SHAKE2SAVE</h1>
-            <p class="subtitle">Press the Button or Shake in Emergency</p>
+        const sosButton = document.getElementById('sosButton');
+        const statusModal = document.getElementById('statusModal');
+        const confirmOverlay = document.getElementById('confirmOverlay');
+        const confirmCancel = document.getElementById('confirmCancel');
+        const confirmOk = document.getElementById('confirmOk');
 
-            <div class="sos-button-container">
-                <div class="pulsing-ring"></div>
-                <button id="sosButton" class="sos-button">SOS</button>
-            </div>
+        // --- 1. One-Tap SOS Button Logic ---
+        sosButton.addEventListener('click', () => {
+            // Show the confirmation modal instead of sending SOS directly
+            confirmOverlay.style.display = 'flex';
+        });
+        
+        // --- Modal Button Logic ---
+        confirmCancel.addEventListener('click', () => {
+            confirmOverlay.style.display = 'none';
+        });
 
-            <p class="info-text">You will alert your trusted contacts.</p>
+        confirmOk.addEventListener('click', () => {
+            confirmOverlay.style.display = 'none';
+            // Vibrate for feedback
+            if ('vibrate' in navigator) {
+                navigator.vibrate(200);
+            }
+            sendSOS("Button Pressed");
+        });
 
-            <div class="button-group">
-                <button id="reportButton" class="report-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    Quick Report
-                </button>
-            </div>
 
-            <div class="powered-by">
-                <p>POWERED BY</p>
+        // --- 2. Shake Detection Logic ---
+        const shakeThreshold = 25; // Sensitivity: Higher means less sensitive
+        let lastX, lastY, lastZ;
+        let lastTimestamp = 0;
+        const shakeCooldown = 2000; // 2 seconds cooldown to prevent multiple alerts
+
+        function handleMotion(event) {
+            const currentTime = new Date().getTime();
+            if ((currentTime - lastTimestamp) < shakeCooldown) {
+                return; // Still in cooldown period
+            }
+            
+            const acceleration = event.accelerationIncludingGravity;
+            
+            if (lastX === undefined) {
+                lastX = acceleration.x;
+                lastY = acceleration.y;
+                lastZ = acceleration.z;
+                return;
+            }
+
+            const deltaX = Math.abs(acceleration.x - lastX);
+            const deltaY = Math.abs(acceleration.y - lastY);
+            const deltaZ = Math.abs(acceleration.z - lastZ);
+
+            if (deltaX > shakeThreshold || deltaY > shakeThreshold || deltaZ > shakeThreshold) {
+                console.log('Shake detected!');
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([200, 100, 200]); // Vibrate pattern for shake
+                }
+                sendSOS("Shake Detected");
+                lastTimestamp = currentTime; // Reset the timestamp
+            }
+
+            lastX = acceleration.x;
+            lastY = acceleration.y;
+            lastZ = acceleration.z;
+        }
+        
+        // Request permission for motion events on iOS 13.3+
+        function requestMotionPermission() {
+             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                             window.addEventListener('devicemotion', handleMotion);
+                             console.log('Motion permission granted.');
+                        } else {
+                            console.log('Motion permission denied.');
+                            showStatus('Shake to alert disabled. Please grant motion sensor permission.', 'error');
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                // Handle non-iOS 13.3+ devices or devices without this API
+                window.addEventListener('devicemotion', handleMotion);
+            }
+        }
+        
+        // Start listening for shake events
+        requestMotionPermission();
+
+
+        // --- 3. Main SOS Function (Gets Location and sends alert) ---
+        function sendSOS(triggerMethod) {
+            console.log(`SOS triggered by: ${triggerMethod}. Getting location...`);
+            showStatus('SOS TRIGGERED! Alerting contacts...', 'default');
+
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        const mapsLink = `http://googleusercontent.com/maps.google.com/3{latitude},${longitude}`;
+                        
+                        const message = `Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink}`;
+                        console.log(message);
+                        
+                        // **Backend Integration Point (with contacts)**
+                        // Here you would send this 'message' and the saved 'contacts'
+                        // to your backend to send the real alert.
+                        const emergencyContacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
+
+                        console.log('Sending alert to contacts:', emergencyContacts);
+
+                        setTimeout(() => {
+                           showStatus('Alert sent with your location.', 'default');
+                        }, 1500);
+                    },
+                    (error) => {
+                        console.error("Error getting location:", error.message);
+                        showStatus('Could not get location. Please enable GPS.', 'error');
+                    },
+                    { enableHighAccuracy: true } // Request more accurate location
+                );
+            } else {
+                showStatus('Geolocation is not supported by your browser.', 'error');
+            }
+        }
+
+        // --- 4. UI Feedback Function (Status Modal) ---
+        function showStatus(message, type = 'default') {
+            statusModal.textContent = message;
+            statusModal.className = 'status-modal show';
+            
+            if (type === 'error') {
+                statusModal.classList.add('error');
+            }
+
+            // Hide the modal after 4 seconds
+            setTimeout(() => {
+                statusModal.classList.remove('show');
+            }, 4000);
+        }
+
+        // --- 5. Side Navigation Logic ---
+        const sideNav = document.getElementById('sideNav');
+        const navOverlay = document.getElementById('navOverlay');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+        const aboutAppBtn = document.getElementById('aboutAppBtn');
+        const aboutOverlay = document.getElementById('aboutOverlay');
+        const closeAboutBtn = document.getElementById('closeAboutBtn');
+
+        // Open side nav
+        hamburgerIcon.addEventListener('click', () => {
+            sideNav.classList.add('open');
+            navOverlay.classList.add('show');
+        });
+
+        // Function to close the side nav
+        function closeNav() {
+            sideNav.classList.remove('open');
+            navOverlay.classList.remove('show');
+        }
+        // Close nav when clicking the overlay
+        navOverlay.addEventListener('click', closeNav);
+
+        // --- "About App" Modal Logic ---
+        aboutAppBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent page from jumping
+            aboutOverlay.style.display = 'flex';
+            closeNav(); // Close the nav menu when opening the modal
+        });
+
+        // Hide About App modal
+        closeAboutBtn.addEventListener('click', () => {
+            aboutOverlay.style.display = 'none';
+        });
+
+        // --- New Profile Modals Logic ---
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editMenuOverlay = document.getElementById('editMenuOverlay');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const editNameBtn = document.getElementById('editNameBtn');
+        const editContactsBtn = document.getElementById('editContactsBtn');
+        
+        // Name Modal
+        const editNameOverlay = document.getElementById('editNameOverlay');
+        const closeNameBtn = document.getElementById('closeNameBtn');
+        const saveNameBtn = document.getElementById('saveNameBtn');
+        const nameInput = document.getElementById('nameInput');
+        const userNameDisplay = document.querySelector('.nav-user-name');
+        
+        // Contacts Modal
+        const editContactsOverlay = document.getElementById('editContactsOverlay');
+        const closeContactsBtn = document.getElementById('closeContactsBtn');
+        const saveContactsBtn = document.getElementById('saveContactsBtn');
+        const contact1Input = document.getElementById('contact1');
+        const contact2Input = document.getElementById('contact2');
+        const contact3Input = document.getElementById('contact3');
+
+        // Pre-fill contacts if they exist
+        function loadContacts() {
+            const savedContacts = JSON.parse(localStorage.getItem('emergencyContacts'));
+            if (savedContacts) {
+                contact1Input.value = savedContacts[0] || '';
+                contact2Input.value = savedContacts[1] || '';
+                contact3Input.value = savedContacts[2] || '';
+            }
+        }
+        loadContacts();
+
+        // Open the Edit Profile Menu
+        editProfileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            editMenuOverlay.style.display = 'flex';
+            closeNav();
+        });
+
+        // Close the Edit Profile Menu
+        closeMenuBtn.addEventListener('click', () => {
+            editMenuOverlay.style.display = 'none';
+        });
+
+        // Open the Edit Name modal from the menu
+        editNameBtn.addEventListener('click', () => {
+            editMenuOverlay.style.display = 'none';
+            editNameOverlay.style.display = 'flex';
+        });
+        
+        // Open the Edit Contacts modal from the menu
+        editContactsBtn.addEventListener('click', () => {
+            editMenuOverlay.style.display = 'none';
+            editContactsOverlay.style.display = 'flex';
+        });
+
+        // Close the Edit Name modal
+        closeNameBtn.addEventListener('click', () => {
+            editNameOverlay.style.display = 'none';
+        });
+
+        // Save the name and update the display
+        saveNameBtn.addEventListener('click', () => {
+            const newName = nameInput.value;
+            if (newName.trim() !== '') {
+                userNameDisplay.textContent = newName;
+                showStatus('Name updated successfully!', 'default');
+            }
+            editNameOverlay.style.display = 'none';
+        });
+        
+        // Close the Edit Contacts modal
+        closeContactsBtn.addEventListener('click', () => {
+            editContactsOverlay.style.display = 'none';
+        });
+
+        // Save the contacts and update localStorage
+        saveContactsBtn.addEventListener('click', () => {
+            const contacts = [
+                contact1Input.value,
+                contact2Input.value,
+                contact3Input.value
+            ].filter(contact => contact.trim() !== ''); // Filter out empty strings
+            
+            // For a real app, this is where you'd send contacts to a backend database.
+            // For now, we save them to the browser's local storage.
+            localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+            
+            if (contacts.length > 0) {
+                 showStatus(`Saved ${contacts.length} contacts.`, 'default');
+            } else {
+                 showStatus('No contacts saved.', 'error');
+            }
+
+            editContactsOverlay.style.display = 'none';
+        });
+
+    </script>
+</body>
+</html>
