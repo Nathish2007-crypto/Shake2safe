@@ -864,16 +864,36 @@
                         const mapsLink = `http://googleusercontent.com/maps.google.com/8{latitude},${longitude}`;
                         
                         const message = `Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink}`;
-                        console.log(message);
                         
-                        // **Backend Integration Point (with contacts)**
+                        // **New Backend Integration Point (with contacts)**
                         const emergencyContacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
+                        const backendUrl = "http://localhost:3000/api/alert"; // ⚠️ IMPORTANT: Change this to your live server URL later
 
-                        console.log('Sending alert to contacts:', emergencyContacts);
-
-                        setTimeout(() => {
-                           showStatus('Alert sent with your location.', 'default');
-                        }, 1500);
+                        fetch(backendUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                contacts: emergencyContacts,
+                                message: message
+                            }),
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Alert sent to backend successfully:', data);
+                            showStatus('Alert sent to contacts!', 'default');
+                        })
+                        .catch(error => {
+                            console.error('Error sending alert to backend:', error);
+                            showStatus('Failed to send alert. Please try again.', 'error');
+                        });
+                        
                     },
                     (error) => {
                         console.error("Error getting location:", error.message);
