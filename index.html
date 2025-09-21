@@ -138,6 +138,34 @@
             color: var(--light-text-color);
             margin-bottom: 40px;
         }
+
+        /* --- Additional Buttons --- */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .report-button {
+            padding: 12px 25px;
+            border: none;
+            background-color: #3f51b5;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .siren-button {
+            padding: 12px 25px;
+            border: none;
+            background-color: #ff9800;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
         
         .powered-by {
             font-size: 0.9em;
@@ -156,6 +184,10 @@
             padding: 10px;
             text-align: center;
             font-size: 0.9em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         /* --- Status Message Modal --- */
@@ -206,16 +238,12 @@
             width: 90%;
             max-width: 320px;
         }
-
-        .confirm-modal h2 {
-            margin-top: 0;
-            font-size: 1.2em;
-            color: var(--text-color);
-        }
         
-        .confirm-modal p {
+        #confirmOverlay .confirm-modal p {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: var(--text-color);
             margin-bottom: 25px;
-            color: var(--light-text-color);
         }
 
         .confirm-buttons {
@@ -395,7 +423,7 @@
              width: 48%;
         }
 
-        #editMenuModal, #editContactsModal {
+        #editMenuOverlay, #editNameOverlay, #editContactsOverlay, #reportModalOverlay, #mapModalOverlay {
             display: none;
         }
 
@@ -428,6 +456,21 @@
             border: 1px solid #ccc;
         }
 
+        #map-container {
+            width: 100%;
+            height: 90vh; /* Make the map container fill most of the screen */
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -448,6 +491,13 @@
 
         <p class="info-text">You will alert your trusted contacts.</p>
 
+        <div class="button-group">
+            <button id="reportButton" class="report-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                Quick Report
+            </button>
+        </div>
+
         <div class="powered-by">
             <p>POWERED BY</p>
             <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
@@ -456,6 +506,7 @@
     
     <footer class="footer">
         <p>Shake2Save | A Code Warriors Project</p>
+        <button id="sirenButton" class="siren-button">Siren</button>
     </footer>
 
     <div id="sideNav" class="side-nav">
@@ -469,6 +520,12 @@
                 <a href="#" id="editProfileBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                     Edit Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" id="mapBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                    Live Safety Map
                 </a>
             </li>
             <li>
@@ -488,11 +545,11 @@
 
     <div id="confirmOverlay" class="modal-overlay">
         <div class="confirm-modal">
-            <h2>Emergency Alert Trigger</h2>
-            <p>To confirm the emergency alert, press 'OK'. If you pressed this by mistake, press 'CANCEL'.</p>
+            <h2 id="confirmTitle">Emergency Alert Trigger</h2>
+            <p id="countdownMessage">Alert will be sent in 5 seconds.</p>
             <div class="confirm-buttons">
                 <button id="confirmCancel">CANCEL</button>
-                <button id="confirmOk">OK</button>
+                <button id="confirmOk" style="display:none;">OK</button>
             </div>
         </div>
     </div>
@@ -556,6 +613,28 @@
             </div>
         </div>
     </div>
+    
+    <div id="reportModalOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Report Unsafe Area</h2>
+            <p>Are you sure you want to report this location as unsafe?</p>
+            <div class="confirm-buttons">
+                <button id="reportCancel">CANCEL</button>
+                <button id="reportConfirm">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapModalOverlay" class="modal-overlay">
+        <div class="about-modal-content">
+            <div class="map-header">
+                <h2>Live Safety Map</h2>
+                <button id="closeMapBtn" class="close-btn" style="margin: 0; padding: 5px 15px;">Close</button>
+            </div>
+            <div id="map-container">
+                </div>
+        </div>
+    </div>
 
 
     <script>
@@ -566,25 +645,37 @@
         const confirmOverlay = document.getElementById('confirmOverlay');
         const confirmCancel = document.getElementById('confirmCancel');
         const confirmOk = document.getElementById('confirmOk');
+        let countdownInterval;
 
-        // --- 1. One-Tap SOS Button Logic ---
+        // --- 1. One-Tap SOS Button Logic with Countdown ---
         sosButton.addEventListener('click', () => {
-            // Show the confirmation modal instead of sending SOS directly
+            const confirmTitle = document.getElementById('confirmTitle');
+            const countdownMessage = document.getElementById('countdownMessage');
+            
+            // Show the confirmation modal
             confirmOverlay.style.display = 'flex';
+            confirmOk.style.display = 'none'; // Hide the OK button
+            
+            let timeLeft = 5;
+            countdownMessage.textContent = `Alert will be sent in ${timeLeft} seconds.`;
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    countdownMessage.textContent = `Alert will be sent in ${timeLeft} seconds.`;
+                } else {
+                    clearInterval(countdownInterval);
+                    confirmOverlay.style.display = 'none';
+                    sendSOS("Button Pressed");
+                }
+            }, 1000);
         });
         
         // --- Modal Button Logic ---
         confirmCancel.addEventListener('click', () => {
+            clearInterval(countdownInterval);
             confirmOverlay.style.display = 'none';
-        });
-
-        confirmOk.addEventListener('click', () => {
-            confirmOverlay.style.display = 'none';
-            // Vibrate for feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
-            sendSOS("Button Pressed");
+            showStatus('Alert cancelled.', 'default');
         });
 
 
@@ -660,14 +751,12 @@
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const { latitude, longitude } = position.coords;
-                        const mapsLink = `http://googleusercontent.com/maps.google.com/3{latitude},${longitude}`;
+                        const mapsLink = `http://googleusercontent.com/maps.google.com/5{latitude},${longitude}`;
                         
                         const message = `Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink}`;
                         console.log(message);
                         
                         // **Backend Integration Point (with contacts)**
-                        // Here you would send this 'message' and the saved 'contacts'
-                        // to your backend to send the real alert.
                         const emergencyContacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
 
                         console.log('Sending alert to contacts:', emergencyContacts);
@@ -832,6 +921,74 @@
             }
 
             editContactsOverlay.style.display = 'none';
+        });
+        
+        // --- Quick Report Logic ---
+        const reportButton = document.getElementById('reportButton');
+        const reportModalOverlay = document.getElementById('reportModalOverlay');
+        const reportCancel = document.getElementById('reportCancel');
+        const reportConfirm = document.getElementById('reportConfirm');
+
+        reportButton.addEventListener('click', () => {
+            reportModalOverlay.style.display = 'flex';
+        });
+
+        reportCancel.addEventListener('click', () => {
+            reportModalOverlay.style.display = 'none';
+        });
+
+        reportConfirm.addEventListener('click', () => {
+            reportModalOverlay.style.display = 'none';
+            showStatus('Reporting unsafe location...', 'default');
+            
+            // This is where you would send the report to a backend.
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        console.log(`Unsafe location reported at: ${latitude}, ${longitude}`);
+                        showStatus('Location reported successfully.', 'default');
+                    },
+                    (error) => {
+                        console.error("Error reporting location:", error.message);
+                        showStatus('Could not report location. Please enable GPS.', 'error');
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                showStatus('Geolocation not supported.', 'error');
+            }
+        });
+
+        // --- Siren Logic ---
+        const sirenButton = document.getElementById('sirenButton');
+        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); // A placeholder sound
+
+        sirenButton.addEventListener('click', () => {
+            audio.play().catch(error => {
+                console.error("Audio playback failed:", error);
+                showStatus('Siren playback failed. Check browser settings.', 'error');
+            });
+        });
+
+        // --- Live Safety Map Logic ---
+        const mapBtn = document.getElementById('mapBtn');
+        const mapModalOverlay = document.getElementById('mapModalOverlay');
+        const closeMapBtn = document.getElementById('closeMapBtn');
+
+        mapBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            mapModalOverlay.style.display = 'flex';
+            closeNav();
+            
+            // **MAP INTEGRATION POINT**
+            // This is where you would initialize the map from a service like Google Maps.
+            // You would insert your map code here.
+            // Example: initMap();
+        });
+
+        closeMapBtn.addEventListener('click', () => {
+            mapModalOverlay.style.display = 'none';
         });
 
     </script>
