@@ -11,7 +11,7 @@
     <style>
         /* CSS for styling the app */
         :root {
-            --primary-color: #c70000;
+            --primary-color: #c70000; /* Main red color */
             --background-color: #f0f2f5;
             --text-color: #333;
             --light-text-color: #666;
@@ -28,242 +28,533 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
-        .hidden { display: none !important; }
-
-        /* --- NEW: Onboarding Screens --- */
-        .onboarding-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--background-color); z-index: 6000;
-            display: flex; flex-direction: column; overflow-y: auto;
-        }
-        .onboarding-header {
-            background-color: var(--header-bg); padding: 15px; text-align: center;
-            font-size: 1.2em; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .onboarding-form {
-            padding: 20px; display: flex; flex-direction: column; gap: 15px; flex-grow: 1;
-        }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { margin-bottom: 5px; font-weight: 600; color: var(--light-text-color); }
-        .form-group input {
-            padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em;
-            font-family: 'Poppins', sans-serif;
-        }
-        .onboarding-form button {
-            margin-top: auto; /* Pushes button to the bottom */
-            padding: 15px; font-size: 1.1em; font-weight: 600;
-            color: white; background-color: var(--primary-color); border: none;
-            border-radius: 8px; cursor: pointer; transition: background-color 0.2s;
-        }
-        .contact-group {
-            background-color: #fff; padding: 15px; border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 10px; text-align: left;
-        }
-        .contact-group h3 {
-            margin-top: 0; font-size: 1.1em; border-bottom: 1px solid #eee;
-            padding-bottom: 10px; margin-bottom: 15px;
-        }
-        .contact-group h3 span { font-weight: 500; font-size: 0.9em; color: var(--light-text-color); }
         
-        /* --- YOUR EXISTING APP CSS --- */
-        .header { background-color: var(--header-bg); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .header-title { font-weight: 600; font-size: 1.1em; color: var(--text-color); }
-        .header-icon { font-size: 1.5em; cursor: pointer; }
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); }
-        .title { font-size: 2em; font-weight: 700; color: #5d2b2b; margin-bottom: 5px; }
-        .subtitle { font-size: 1.2em; color: var(--primary-color); margin-bottom: 30px; }
-        .sos-button-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
-        .sos-button { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, #ff4b4b, var(--primary-color)); border: 8px solid #fff; box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4); color: white; font-size: 2.5em; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; z-index: 1; }
-        .pulsing-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 10px solid rgba(200, 0, 0, 0.3); animation: pulse 2s infinite; z-index: 0; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
-        /* ... All of your other 700+ lines of CSS go here ... */
+        /* --- Header --- */
+        .header {
+            background-color: var(--header-bg);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-title {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+        .header-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
+        }
+        
+        .title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #5d2b2b;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        
+        /* --- SOS Emergency Button --- */
+        .sos-button-container {
+            position: relative;
+            width: 200px; /* Adjust size as needed */
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .sos-button {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4b4b, var(--primary-color));
+            border: 8px solid #fff;
+            box-shadow: var(--button-shadow), inset 0 0 15px rgba(255,255,255,0.4);
+            color: white;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 1;
+        }
+        
+        .sos-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .pulsing-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid rgba(200, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+            z-index: 0;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.4);
+                opacity: 0;
+            }
+        }
+        
+        .info-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--light-text-color);
+            margin-bottom: 40px;
+        }
+
+        /* --- Additional Buttons --- */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .report-button {
+            padding: 12px 25px;
+            border: none;
+            background-color: #3f51b5;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .siren-button {
+            padding: 12px 25px;
+            border: none;
+            background-color: #ff9800;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .powered-by {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .powered-by img {
+            width: 50px; /* Placeholder for your logo */
+            margin-top: 10px;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- Status Message Modal --- */
+        .status-modal {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: top 0.5s ease-in-out;
+            font-weight: 600;
+        }
+
+        .status-modal.show {
+            top: 20px;
+        }
+
+        .status-modal.error {
+            background-color: var(--primary-color);
+        }
+
+        /* --- Generic Modal Overlay --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        /* --- Confirmation Modal --- */
+        .confirm-modal {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 320px;
+        }
+        
+        #confirmOverlay .confirm-modal p {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .confirm-buttons button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .confirm-buttons button:hover {
+            opacity: 0.9;
+        }
+
+        #confirmCancel {
+            background-color: var(--primary-color);
+        }
+
+        #confirmOk {
+            background-color: #28a745;
+        }
+
+        /* --- Side Navigation Menu --- */
+        .side-nav {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Hidden by default */
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            z-index: 4000;
+            transition: left 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-nav.open {
+            left: 0;
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 3999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .nav-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-profile {
+            background: linear-gradient(to bottom, #e0e0e0, #ffffff);
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .nav-profile-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            margin: 0 auto 15px;
+            background-image: url('https://placehold.co/100x100/ffffff/333?text=G');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .nav-user-name {
+            font-weight: 700;
+            font-size: 1.2em;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .nav-user-phone {
+            font-size: 0.9em;
+            color: var(--light-text-color);
+            margin: 5px 0 0;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 15px 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-links li a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .nav-links li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .nav-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #999;
+            border-top: 1px solid #ddd;
+        }
+        
+        /* --- About App Modal --- */
+        .about-modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .about-modal-content h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .about-modal-content h3 {
+            margin-top: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .about-modal-content p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .about-modal-content ul {
+            list-style-type: '✓';
+            padding-left: 20px;
+        }
+        .about-modal-content li {
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        .close-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 30px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* --- Modals --- */
+        #editProfileOverlay .confirm-buttons button {
+             width: 48%;
+        }
+
+        #onboarding, #editMenuOverlay, #editNameOverlay, #editContactsOverlay, #reportModalOverlay, #mapModalOverlay {
+            display: none;
+        }
+
+        #onboarding.show {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
+        }
+        
+        #onboarding .confirm-modal {
+            max-width: 350px;
+            padding: 30px;
+        }
+        
+        #onboarding h1 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        #onboarding p {
+            color: var(--light-text-color);
+            font-size: 1em;
+            margin-bottom: 25px;
+        }
+
+        .edit-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .contact-input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .contact-input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: var(--light-text-color);
+        }
+        .contact-input-group input {
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #map-container {
+            width: 100%;
+            height: 90vh; /* Make the map container fill most of the screen */
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+        
+        .main-app {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
     </style>
 </head>
 <body>
-
-    <!-- Onboarding: Registration Screen -->
-    <div id="registrationScreen" class="onboarding-screen">
-        <div class="onboarding-header">CREATE YOUR PROFILE</div>
-        <form id="registrationForm" class="onboarding-form">
-            <div class="form-group">
-                <label for="userNameInput">Name (Mandatory)</label>
-                <input type="text" id="userNameInput" placeholder="Enter your full name" required>
+    
+    <div id="onboarding" class="modal-overlay show">
+        <div class="confirm-modal">
+            <h1>Welcome to Shake2Save!</h1>
+            <p>Please enter your details to get started.</p>
+            <div class="contact-input-group">
+                <label for="onboardingName">Your Name</label>
+                <input type="text" id="onboardingName" placeholder="Enter your full name">
             </div>
-            <div class="form-group">
-                <label for="userPhoneInput">Your Mobile Number (Mandatory)</label>
-                <input type="tel" id="userPhoneInput" placeholder="Enter 10-digit number" required pattern="[0-9]{10}">
+            <div class="contact-input-group">
+                <label for="onboardingContact1">Emergency Contact 1</label>
+                <input type="tel" id="onboardingContact1" placeholder="Phone number">
             </div>
-            <button type="submit">NEXT</button>
-        </form>
+            <div class="contact-input-group">
+                <label for="onboardingContact2">Emergency Contact 2</label>
+                <input type="tel" id="onboardingContact2" placeholder="Phone number">
+            </div>
+            <div class="contact-input-group">
+                <label for="onboardingContact3">Emergency Contact 3</label>
+                <input type="tel" id="onboardingContact3" placeholder="Phone number">
+            </div>
+            <button id="onboardingStartBtn" class="close-btn" style="width: 100%;">START</button>
+        </div>
     </div>
 
-    <!-- Onboarding: Emergency Contacts Screen -->
-    <div id="contactsScreen" class="onboarding-screen hidden">
-        <div class="onboarding-header">EMERGENCY CONTACTS</div>
-        <form id="contactsForm" class="onboarding-form">
-            <div class="contact-group">
-                <h3>Contact - 1 <span>(Mandatory)</span></h3>
-                <input type="tel" id="contact1" placeholder="Enter 10-digit number" required pattern="[0-9]{10}">
-            </div>
-            <div class="contact-group">
-                <h3>Contact - 2 <span>(Mandatory)</span></h3>
-                <input type="tel" id="contact2" placeholder="Enter 10-digit number" required pattern="[0-9]{10}">
-            </div>
-            <div class="contact-group">
-                <h3>Contact - 3 <span>(Optional)</span></h3>
-                <input type="tel" id="contact3" placeholder="Enter 10-digit number" pattern="[0-9]{10}">
-            </div>
-            <button type="submit">FINISH SETUP</button>
-        </form>
-    </div>
 
-    <!-- YOUR MAIN APP (Initially hidden) -->
-    <div id="mainApp" class="hidden" style="display: flex; flex-direction: column; min-height: 100vh;">
+    <div class="main-app" id="mainAppContainer">
         <header class="header">
-             <span class="header-icon" id="hamburgerIcon">☰</span>
-             <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
-             <span class="header-icon">🔔</span>
+            <span class="header-icon" id="hamburgerIcon">☰</span>
+            <span class="header-title">SHAKE2SAVE - SAFETY APP</span>
+            <span class="header-icon">🔔</span>
         </header>
+
         <main class="main-content">
-             <h1 class="title">SHAKE2SAVE</h1>
-             <p class="subtitle">Press the Button or Shake in Emergency</p>
-             <div class="sos-button-container">
-                 <div class="pulsing-ring"></div>
-                 <button id="sosButton" class="sos-button">SOS</button>
-             </div>
-             <p class="info-text">You will alert your trusted contacts.</p>
-             <div class="button-group">
-                 <button id="reportButton" class="report-button">Quick Report</button>
-             </div>
-             <div class="powered-by">
-                 <p>POWERED BY</p>
-                 <img src="https://placehold.co/100x100/ffffff/c70000?text=CW" alt="Code Warriors Logo">
-             </div>
-        </main>
-        <footer class="footer">
-             <p>Shake2Save | A Code Warriors Project</p>
-             <button id="sirenButton" class="siren-button">Siren</button>
-        </footer>
-        <!-- All your modals and side nav HTML would go here -->
-    </div>
-    
-    <!-- ============================================= -->
-    <!-- ============== SCRIPT BLOCKS ================ -->
-    <!-- ============================================= -->
+            <h1 class="title">SHAKE2SAVE</h1>
+            <p class="subtitle">Press the Button or Shake in Emergency</p>
 
-    <!-- STEP 1: ADD FIREBASE SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+            <div class="sos-button-container">
+                <div class="pulsing-ring"></div>
+                <button id="sosButton" class="sos-button">SOS</button>
+            </div>
 
-        // --- PASTE YOUR FIREBASE CONFIG HERE ---
-        const firebaseConfig = {
-            /* Your config object */
-        };
+            <p class="info-text">You will alert your trusted contacts.</p>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+            <div class="button-group">
+                <button id="reportButton" class="report-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    Quick Report
+                </button>
+            </div>
 
-        // --- Make Firestore functions globally accessible ---
-        window.db = {
-            saveUserData: (userId, userData) => setDoc(doc(db, "users", userId), userData, { merge: true }),
-            getUserData: (userId) => getDoc(doc(db, "users", userId)),
-            addReport: (reportData) => addDoc(collection(db, "reports"), reportData),
-            getReports: () => getDocs(collection(db, "reports")),
-            serverTimestamp: serverTimestamp
-        };
-    </script>
-    
-    <!-- STEP 2: ADD GOOGLE MAPS API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=visualization&callback=initMap" defer></script>
-
-    <!-- STEP 3: MAIN APPLICATION JAVASCRIPT -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const registrationScreen = document.getElementById('registrationScreen');
-            const contactsScreen = document.getElementById('contactsScreen');
-            const mainApp = document.getElementById('mainApp');
-            const registrationForm = document.getElementById('registrationForm');
-            const contactsForm = document.getElementById('contactsForm');
-
-            // --- 1. Check if user is already registered ---
-            let userId = localStorage.getItem('shake2save_userId');
-            const isRegistered = localStorage.getItem('shake2save_isRegistered') === 'true';
-
-            if (!userId) {
-                userId = 'user_' + Date.now(); // More robust unique ID
-                localStorage.setItem('shake2save_userId', userId);
-            }
-            
-            // Wait for Firestore to be initialized
-            while (!window.db) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
-            if (isRegistered) {
-                registrationScreen.classList.add('hidden');
-                mainApp.classList.remove('hidden');
-                // You would load user data here to populate side nav etc.
-            } else {
-                registrationScreen.classList.remove('hidden');
-            }
-
-            // --- 2. Handle Registration Form Submission ---
-            registrationForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const userName = document.getElementById('userNameInput').value.trim();
-                const userPhone = document.getElementById('userPhoneInput').value.trim();
-
-                if (!userName || !userPhone || !/^\d{10}$/.test(userPhone)) {
-                    alert('Please enter a valid name and 10-digit phone number.');
-                    return;
-                }
-
-                try {
-                    await window.db.saveUserData(userId, { name: userName, phone: userPhone });
-                    registrationScreen.classList.add('hidden');
-                    contactsScreen.classList.remove('hidden');
-                } catch (error) {
-                    console.error("Error saving user data: ", error);
-                    alert("Could not save profile. Please try again.");
-                }
-            });
-
-            // --- 3. Handle Contacts Form Submission ---
-            contactsForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const contact1 = document.getElementById('contact1').value.trim();
-                const contact2 = document.getElementById('contact2').value.trim();
-                const contact3 = document.getElementById('contact3').value.trim();
-
-                if (!contact1 || !contact2 || !/^\d{10}$/.test(contact1) || !/^\d{10}$/.test(contact2)) {
-                    alert('Please enter at least two valid 10-digit emergency contacts.');
-                    return;
-                }
-
-                const emergencyContacts = [contact1, contact2, contact3].filter(c => c);
-
-                try {
-                    await window.db.saveUserData(userId, { emergencyContacts });
-                    localStorage.setItem('shake2save_isRegistered', 'true');
-                    contactsScreen.classList.add('hidden');
-                    mainApp.classList.remove('hidden');
-                } catch (error) {
-                    console.error("Error saving contacts: ", error);
-                    alert("Could not save contacts. Please try again.");
-                }
-            });
-
-            // --- 4. Your existing main app logic (SOS button, modals, side nav, etc.) goes here ---
-            // ... (The rest of your 700+ lines of JavaScript)
-        });
-
-        // Your global functions like initMap, showStatus, etc. would be here
-        function initMap() {
-            // Map initialization logic
-        }
-    </script>
-</body>
-</html>
-
+            <div class="powered-by">
+                <p>POWERED BY</p>
