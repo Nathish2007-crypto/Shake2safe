@@ -423,7 +423,7 @@
              width: 48%;
         }
 
-        #onboarding, #editMenuOverlay, #editNameOverlay, #editContactsOverlay, #reportModalOverlay, #mapModalOverlay {
+        #onboarding, #editMenuOverlay, #editNameOverlay, #editContactsOverlay, #reportModalOverlay, #mapModalOverlay, #chatbotOverlay {
             display: none;
         }
 
@@ -501,7 +501,84 @@
             flex-direction: column;
             min-height: 100vh;
         }
+        
+        /* --- Chatbot Modal Styles --- */
+        .chatbot-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 80vh;
+            max-height: 600px;
+        }
 
+        .chatbot-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #e5e5ea;
+            margin-right: auto;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            gap: 10px;
+        }
+
+        .chatbot-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .chatbot-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -591,6 +668,12 @@
                 <a href="#" id="aboutAppBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                     About App
+                </a>
+            </li>
+             <li>
+                <a href="#" id="chatbotBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    Chatbot AI
                 </a>
             </li>
             <li>
@@ -698,6 +781,22 @@
             </div>
             <div id="map-container">
                 </div>
+        </div>
+    </div>
+
+    <div id="chatbotOverlay" class="modal-overlay">
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <span>Shake2Save AI Chatbot</span>
+                <button id="closeChatbotBtn" class="close-btn" style="margin: 0; padding: 5px 15px; background: none; color: white;">&times;</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">Hello! I am your personal safety assistant. How can I help you today?</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button id="sendBtn">▶</button>
+            </div>
         </div>
     </div>
 
@@ -935,6 +1034,7 @@
         const aboutOverlay = document.getElementById('aboutOverlay');
         const closeAboutBtn = document.getElementById('closeAboutBtn');
         const signOutBtn = document.getElementById('signOutBtn');
+        const chatbotBtn = document.getElementById('chatbotBtn');
 
         // Open side nav
         hamburgerIcon.addEventListener('click', () => {
@@ -1132,7 +1232,78 @@
         closeMapBtn.addEventListener('click', () => {
             mapModalOverlay.style.display = 'none';
         });
+        
+        // --- Chatbot Logic ---
+        const chatbotOverlay = document.getElementById('chatbotOverlay');
+        const closeChatbotBtn = document.getElementById('closeChatbotBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
 
+        // Open Chatbot modal
+        chatbotBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            chatbotOverlay.style.display = 'flex';
+            closeNav();
+        });
+
+        // Close Chatbot modal
+        closeChatbotBtn.addEventListener('click', () => {
+            chatbotOverlay.style.display = 'none';
+        });
+
+        // Function to handle chatbot response
+        function getChatbotResponse(message) {
+            const lowerCaseMessage = message.toLowerCase().trim();
+            let response = "I'm sorry, I don't understand. Can you rephrase that? For immediate assistance, please use the SOS button.";
+
+            if (lowerCaseMessage.includes("help") || lowerCaseMessage.includes("emergency")) {
+                response = "If you are in danger, please press the large red SOS button immediately to alert your contacts. I can provide guidance on what to do in an emergency, or give you first-aid tips.";
+            } else if (lowerCaseMessage.includes("location") || lowerCaseMessage.includes("where am i")) {
+                response = "I can't see your current location, but you can press the SOS button to share your location with your trusted contacts.";
+            } else if (lowerCaseMessage.includes("first aid") || lowerCaseMessage.includes("firstaid")) {
+                response = "I can provide basic first-aid advice. Please describe the situation you need help with (e.g., 'cut', 'burn', 'sprain').";
+            } else if (lowerCaseMessage.includes("cut")) {
+                response = "For a minor cut, clean the wound with soap and water, apply a topical antibiotic, and cover it with a sterile bandage. For deep cuts, apply pressure and seek immediate medical attention.";
+            } else if (lowerCaseMessage.includes("how are you")) {
+                response = "I am a helpful AI assistant. My primary function is to help you with safety information.";
+            } else if (lowerCaseMessage.includes("thanks") || lowerCaseMessage.includes("thank you")) {
+                response = "You're welcome! Stay safe.";
+            }
+
+            return response;
+        }
+
+        // Function to add a message to the chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+        }
+
+        // Handle sending messages
+        function sendMessage() {
+            const userText = userInput.value.trim();
+            if (userText === '') return;
+            
+            addMessage(userText, 'user');
+            userInput.value = '';
+
+            // Simulate a typing delay for the bot
+            setTimeout(() => {
+                const botResponse = getChatbotResponse(userText);
+                addMessage(botResponse, 'bot');
+            }, 500); // 0.5 second delay
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
     </script>
 </body>
 </html>
