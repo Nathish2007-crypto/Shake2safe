@@ -389,10 +389,43 @@
             cursor: pointer;
             font-weight: 600;
         }
-        
-        /* --- Edit Profile Modal --- */
+
+        /* --- Modals --- */
         #editProfileOverlay .confirm-buttons button {
              width: 48%;
+        }
+
+        #editMenuModal, #editContactsModal {
+            display: none;
+        }
+
+        .edit-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .contact-input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .contact-input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: var(--light-text-color);
+        }
+        .contact-input-group input {
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
     </style>
@@ -480,17 +513,50 @@
         </div>
     </div>
 
-    <div id="editProfileOverlay" class="modal-overlay">
-        <div class="confirm-modal">
+    <div id="editMenuOverlay" class="modal-overlay">
+        <div class="confirm-modal edit-menu">
             <h2>Edit Profile</h2>
+            <button id="editNameBtn">Edit Name</button>
+            <button id="editContactsBtn">Edit Contacts</button>
+            <button id="closeMenuBtn" style="background-color: var(--primary-color); color: white;">Close</button>
+        </div>
+    </div>
+
+    <div id="editNameOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Edit Name</h2>
             <p>Enter your full name and save it.</p>
             <input type="text" id="nameInput" placeholder="Enter your name" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
             <div class="confirm-buttons">
-                <button id="saveProfileBtn">SAVE</button>
-                <button id="closeEditProfileBtn">CANCEL</button>
+                <button id="saveNameBtn">SAVE</button>
+                <button id="closeNameBtn">CANCEL</button>
             </div>
         </div>
     </div>
+    
+    <div id="editContactsOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2>Edit Contacts</h2>
+            <p>Enter up to three emergency phone numbers.</p>
+            <div class="contact-input-group">
+                <label for="contact1">Contact 1</label>
+                <input type="tel" id="contact1" placeholder="e.g., +15551234567">
+            </div>
+            <div class="contact-input-group">
+                <label for="contact2">Contact 2</label>
+                <input type="tel" id="contact2" placeholder="e.g., +15551234567">
+            </div>
+            <div class="contact-input-group">
+                <label for="contact3">Contact 3</label>
+                <input type="tel" id="contact3" placeholder="e.g., +15551234567">
+            </div>
+            <div class="confirm-buttons">
+                <button id="saveContactsBtn">SAVE</button>
+                <button id="closeContactsBtn">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         // --- JavaScript Functionality ---
@@ -594,15 +660,17 @@
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const { latitude, longitude } = position.coords;
-                        const mapsLink = `https://www.google.com/maps?q=$${latitude},${longitude}`;
+                        const mapsLink = `http://googleusercontent.com/maps.google.com/3{latitude},${longitude}`;
                         
                         const message = `Emergency! Triggered by ${triggerMethod}. My location is: ${mapsLink}`;
                         console.log(message);
+                        
+                        // **Backend Integration Point (with contacts)**
+                        // Here you would send this 'message' and the saved 'contacts'
+                        // to your backend to send the real alert.
+                        const emergencyContacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
 
-                        // *HACKATHON INTEGRATION POINT*
-                        // Here you would send this 'message' to your backend or Firebase
-                        // to notify the trusted contacts (e.g., using Twilio for SMS).
-                        // For now, we'll just show it in a confirmation message.
+                        console.log('Sending alert to contacts:', emergencyContacts);
 
                         setTimeout(() => {
                            showStatus('Alert sent with your location.', 'default');
@@ -668,34 +736,102 @@
             aboutOverlay.style.display = 'none';
         });
 
-        // --- New Edit Profile Modal Logic ---
+        // --- New Profile Modals Logic ---
         const editProfileBtn = document.getElementById('editProfileBtn');
-        const editProfileOverlay = document.getElementById('editProfileOverlay');
-        const closeEditProfileBtn = document.getElementById('closeEditProfileBtn');
-        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const editMenuOverlay = document.getElementById('editMenuOverlay');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const editNameBtn = document.getElementById('editNameBtn');
+        const editContactsBtn = document.getElementById('editContactsBtn');
+        
+        // Name Modal
+        const editNameOverlay = document.getElementById('editNameOverlay');
+        const closeNameBtn = document.getElementById('closeNameBtn');
+        const saveNameBtn = document.getElementById('saveNameBtn');
         const nameInput = document.getElementById('nameInput');
         const userNameDisplay = document.querySelector('.nav-user-name');
+        
+        // Contacts Modal
+        const editContactsOverlay = document.getElementById('editContactsOverlay');
+        const closeContactsBtn = document.getElementById('closeContactsBtn');
+        const saveContactsBtn = document.getElementById('saveContactsBtn');
+        const contact1Input = document.getElementById('contact1');
+        const contact2Input = document.getElementById('contact2');
+        const contact3Input = document.getElementById('contact3');
 
-        // Open the Edit Profile modal when the "Edit Profile" link is clicked
+        // Pre-fill contacts if they exist
+        function loadContacts() {
+            const savedContacts = JSON.parse(localStorage.getItem('emergencyContacts'));
+            if (savedContacts) {
+                contact1Input.value = savedContacts[0] || '';
+                contact2Input.value = savedContacts[1] || '';
+                contact3Input.value = savedContacts[2] || '';
+            }
+        }
+        loadContacts();
+
+        // Open the Edit Profile Menu
         editProfileBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            editProfileOverlay.style.display = 'flex';
-            closeNav(); // Close the side nav when opening the modal
+            editMenuOverlay.style.display = 'flex';
+            closeNav();
         });
 
-        // Close the Edit Profile modal
-        closeEditProfileBtn.addEventListener('click', () => {
-            editProfileOverlay.style.display = 'none';
+        // Close the Edit Profile Menu
+        closeMenuBtn.addEventListener('click', () => {
+            editMenuOverlay.style.display = 'none';
+        });
+
+        // Open the Edit Name modal from the menu
+        editNameBtn.addEventListener('click', () => {
+            editMenuOverlay.style.display = 'none';
+            editNameOverlay.style.display = 'flex';
+        });
+        
+        // Open the Edit Contacts modal from the menu
+        editContactsBtn.addEventListener('click', () => {
+            editMenuOverlay.style.display = 'none';
+            editContactsOverlay.style.display = 'flex';
+        });
+
+        // Close the Edit Name modal
+        closeNameBtn.addEventListener('click', () => {
+            editNameOverlay.style.display = 'none';
         });
 
         // Save the name and update the display
-        saveProfileBtn.addEventListener('click', () => {
+        saveNameBtn.addEventListener('click', () => {
             const newName = nameInput.value;
             if (newName.trim() !== '') {
                 userNameDisplay.textContent = newName;
-                showStatus('Profile updated successfully!', 'default');
+                showStatus('Name updated successfully!', 'default');
             }
-            editProfileOverlay.style.display = 'none';
+            editNameOverlay.style.display = 'none';
+        });
+        
+        // Close the Edit Contacts modal
+        closeContactsBtn.addEventListener('click', () => {
+            editContactsOverlay.style.display = 'none';
+        });
+
+        // Save the contacts and update localStorage
+        saveContactsBtn.addEventListener('click', () => {
+            const contacts = [
+                contact1Input.value,
+                contact2Input.value,
+                contact3Input.value
+            ].filter(contact => contact.trim() !== ''); // Filter out empty strings
+            
+            // For a real app, this is where you'd send contacts to a backend database.
+            // For now, we save them to the browser's local storage.
+            localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+            
+            if (contacts.length > 0) {
+                 showStatus(`Saved ${contacts.length} contacts.`, 'default');
+            } else {
+                 showStatus('No contacts saved.', 'error');
+            }
+
+            editContactsOverlay.style.display = 'none';
         });
 
     </script>
