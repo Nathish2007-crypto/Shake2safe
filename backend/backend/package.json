@@ -1,0 +1,16 @@
+{
+  "name": "shake2save-backend",
+  "version": "1.0.0",
+  "description": "Backend for Shake2Save emergency alerts.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "twilio": "^5.2.0"
+  }
+}
