@@ -691,6 +691,16 @@
 
     <div id="statusModal" class="status-modal"></div>
 
+    <div id="confirmOverlay" class="modal-overlay">
+        <div class="confirm-modal">
+            <h2 id="confirmTitle">Confirm SOS Alert</h2>
+            <p id="confirmMessage">Are you sure you want to send an SOS alert?</p>
+            <div class="confirm-buttons">
+                <button id="confirmCancel">CANCEL</button>
+                <button id="confirmOk">OK</button>
+            </div>
+        </div>
+    </div>
     
     <div id="aboutOverlay" class="modal-overlay">
         <div class="about-modal-content">
@@ -804,6 +814,9 @@
 
         const sosButton = document.getElementById('sosButton');
         const statusModal = document.getElementById('statusModal');
+        const confirmOverlay = document.getElementById('confirmOverlay');
+        const confirmCancel = document.getElementById('confirmCancel');
+        const confirmOk = document.getElementById('confirmOk');
 
         // --- Initial Check for Onboarding ---
         window.addEventListener('load', () => {
@@ -852,11 +865,20 @@
         });
 
 
-        // --- 1. One-Tap SOS Button Logic (instant trigger) ---
+        // --- 1. One-Tap SOS Button Logic with Confirmation ---
         sosButton.addEventListener('click', () => {
+            confirmOverlay.style.display = 'flex';
+        });
+
+        confirmOk.addEventListener('click', () => {
+            confirmOverlay.style.display = 'none';
             sendSOS("Button Pressed");
         });
-        
+
+        confirmCancel.addEventListener('click', () => {
+            confirmOverlay.style.display = 'none';
+            showStatus('Alert cancelled.', 'default');
+        });
 
 
         // --- 2. Shake Detection Logic ---
